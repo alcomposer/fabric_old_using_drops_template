@@ -1,4 +1,20 @@
-/* license */
+/*
+    Drops - Drops Really Only Plays Samples
+    Copyright (C) 2021  Rob van den Berg
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include "DropsUI.hpp"
 #include "DistrhoPluginInfo.h"
 
@@ -242,7 +258,7 @@ void DropsUI::initTabFilter()
     fFilterLFOSync->labelSize = font_size;
 
     fFilterLFOTypeMenu = new Menu(hbox_filter_row_3);
-    fFilterLFOTypeMenu->setMaxViewItems(5);
+    fFilterLFOTypeMenu->setMaxViewItems(6);
     fFilterLFOTypeMenu->setId(kFilterLFOTypeMenu);
     fFilterLFOTypeMenu->setCallback(this);
     fFilterLFOTypeMenu->font_size = font_size + 4;
@@ -253,7 +269,8 @@ void DropsUI::initTabFilter()
                                   "b",
                                   "c",
                                   "d",
-                                  "e"});
+                                  "e",
+                                  "f"});
     fFilterLFOTypeMenu->hide();
     fFilterLFOTypeMenu->background_color = black_olive;
     fFilterLFOTypeMenu->foreground_color = black_olive_2;

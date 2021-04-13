@@ -1,4 +1,20 @@
-/* license */
+/*
+    Drops - Drops Really Only Plays Samples
+    Copyright (C) 2021  Rob van den Berg
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include "DropsUI.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -132,7 +148,7 @@ void DropsUI::initTabAmp()
 
     fAmpLFOSync = new CheckBox(hbox_amp_row_2);
     fAmpLFOSync->setId(kAmpLFOSync);
-    fAmpLFOSync->setSize(knobSize.getWidth()*.5,knobSize.getWidth());
+    fAmpLFOSync->setSize(knobSize.getWidth()*.5,knobSize.getHeight());
     fAmpLFOSync->setCallback(this);
     fAmpLFOSync->background_color = black_olive;
     fAmpLFOSync->foreground_color = saffron;
@@ -228,7 +244,7 @@ void DropsUI::initTabAmp()
     fAmpLFOFade->setParamOnMove = true;
 
     fAmpLFOTypeMenu = new Menu(hbox_amp_row_2);
-    fAmpLFOTypeMenu->setMaxViewItems(5);
+    fAmpLFOTypeMenu->setMaxViewItems(6);
     fAmpLFOTypeMenu->setId(kAmpLFOTypeMenu);
     fAmpLFOTypeMenu->setCallback(this);
     fAmpLFOTypeMenu->font_size = font_size + 2;
@@ -239,7 +255,8 @@ void DropsUI::initTabAmp()
                                "b",
                                "c",
                                "d",
-                               "e"});
+                               "e",
+                               "f"});
     fAmpLFOTypeMenu->hide();
     fAmpLFOTypeMenu->background_color = black_olive;
     fAmpLFOTypeMenu->foreground_color = black_olive_2;

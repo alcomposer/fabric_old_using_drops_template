@@ -1,18 +1,20 @@
 /*
- * Drops 2
- *
- * Copyright (C) 2019 Clearly Broken Software
- * Permission to use, copy, modify, and/or distribute this software for any purpose with
- * or without fee is hereby granted, provided that the above copyright notice and this
- * permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD
- * TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN
- * NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
- * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
- * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
+    Drops - Drops Really Only Plays Samples
+    Copyright (C) 2021  Rob van den Berg
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 #ifndef DROPS_HPP_INCLUDED
 #define DROPS_HPP_INCLUDED
@@ -20,7 +22,7 @@
 #include "DistrhoPlugin.hpp"
 #include "DropsParams.h"
 #include "DropsGeometry.hpp"
-#include <sfizz.hpp>
+#include "sfizz.hpp"
 #include <iostream>
 #include <sndfile.hh>
 #include <unordered_map>
@@ -98,10 +100,12 @@ protected:
     // -------------------------------------------------------------------
 
 private:
+    void foo(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
+
     void initSFZ();
     void makeSFZ();
     int loadSample(const char *fp);
-//    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
+    //    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
 
     sf_count_t sampleLength;
     bool sig_sampleLoaded;
@@ -138,7 +142,8 @@ private:
     float bpm;
 
     const char *play_modes_[4]{
-        "no_loop", "one_shot",
+        "no_loop",
+        "one_shot",
         "loop_continuous",
         "loop_sustain"};
     const char *direction_[2]{
@@ -149,12 +154,13 @@ private:
         "bpf_2p",
         "hpf_2p"};
 
-    const int lfo_types_[5]{
-        0, // triangle
-        1, // sine
-        3, // square
-        6, // saw up
-        7, // saw down
+    const int lfo_types_[6]{
+        0,  // triangle
+        1,  // sine
+        3,  // square
+        6,  // saw up
+        7,  // saw down
+        12, // s/h
     };
     const char *lfo_sync_[18]{
         "0.25",     // 1/16
