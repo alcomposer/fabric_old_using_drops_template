@@ -576,7 +576,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         setMarkers(); // FIXME: all markers are set, only 1 is needed :-/
         break;
     case kSampleOut:
-        sampleOut = value * static_cast<float>(sampleLength);
+        sampleOut = (-value + 1.0) * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSampleLoopStart:
@@ -962,23 +962,6 @@ void DropsUI::onNanoDisplay()
     stroke();
     closePath();
 
-    // back label EG
-    // beginPath();
-    // fillColor(blue_pigment_1);
-    // roundedRect(339 + 2,
-    //             329 + 2 + (211 / 3),
-    //             40, 18, 2);
-    // fill();
-    // closePath();
-    // // text
-    // beginPath();
-    // fontSize(16);
-    // fillColor(eerie_black);
-    // cx = 339 + 2 + 40 / 2;
-    // cy = 329 + 2 + 211 / 3 + 18 / 2;
-    // text(cx, cy, "EG", nullptr);
-    // closePath();
-
     // line 2
     beginPath();
     moveTo(339 + 2,
@@ -1267,8 +1250,18 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
 
 void DropsUI::stateChanged(const char *key, const char *value)
 {
+    if (strcmp(key, "filepath") == 0)
+    {
+        fileName = std::string(value);
+        if (plugin->loadedSample)
+        {
+            loadSample();
+            sampleDir = dirnameOf(fileName.c_str());
+            fileopen_button->setText(fileName);
+        }
+    }
 #ifdef DEBUG
-    printf("key = %s, value = %s\n", key, value);
+    printf("DropsUI::stateChanged(key = %s, value = %s)\n", key, value);
 #endif
 }
 
