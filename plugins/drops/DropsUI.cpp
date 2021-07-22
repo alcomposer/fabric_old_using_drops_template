@@ -1101,6 +1101,7 @@ void DropsUI::drawWaveform()
         stroke();
         closePath();
 
+        // playhead line
         beginPath();
         strokeColor(255,0,0); //change to an enum
         strokeWidth(2.0f);

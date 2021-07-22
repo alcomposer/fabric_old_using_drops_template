@@ -23,8 +23,7 @@
 #define DISTRHO_PLUGIN_NAME "Drops"
 #define DISTRHO_PLUGIN_URI "http://github.com/clearly-broken-software/drops"
 
-#define DISTRHO_PLUGIN_IS_EFFECT 1
-#define DISTRHO_PLUGIN_IS_SYNTH 0
+#define DISTRHO_PLUGIN_IS_SYNTH 1
 #define DISTRHO_PLUGIN_HAS_UI 1
 #define DISTRHO_PLUGIN_IS_RT_SAFE 1
 #define DISTRHO_PLUGIN_NUM_INPUTS 2
@@ -35,6 +34,6 @@
 #define DISTRHO_UI_USE_NANOVG 1
 #define DISTRHO_PLUGIN_WANT_MIDI_INPUT 1
 #define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 1
-#define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:InstrumentPlugin"
+#define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:EffectPlugin"
 
 #endif
