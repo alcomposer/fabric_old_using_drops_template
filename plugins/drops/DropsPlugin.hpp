@@ -195,6 +195,8 @@ private:
     const float pitch_lfo_depth = 1200;
     const float lfo_fade = 10.f;
 
+    int buffer;
+
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.

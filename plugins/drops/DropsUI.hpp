@@ -48,6 +48,7 @@
 #include "fonts.hpp"
 #include "CheckBox.hpp"
 
+
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
@@ -62,7 +63,8 @@ class DropsUI : public UI,
                 public FileOpenButton::Callback,
                 // public RadioButton::Callback,
                 public SVGButton::Callback,
-                public CheckBox::Callback
+                public CheckBox::Callback,
+                public IdleCallback
 {
 public:
     DropsUI();
@@ -88,6 +90,7 @@ protected:
     // void onRadioButtonClicked(RadioButton *radio);
     void onSVGButtonClicked(SVGButton *button);
     void onCheckBoxClicked(CheckBox *checkbox, bool is_checked);
+    void idleCallback();
 
 private:
     template <class T>

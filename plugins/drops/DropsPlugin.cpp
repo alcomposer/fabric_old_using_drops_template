@@ -23,7 +23,7 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------
 
-DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
+DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2), waveForm(2000)
 {
 
     sampleRate = getSampleRate();
@@ -89,6 +89,8 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     initSFZ();
 
     client = synth.createClient(&messageList);
+
+    buffer = 0;
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -954,7 +956,7 @@ void DropsPlugin::setState(const char *key, const char *value)
     if (strcmp(key, "filepath") == 0)
     {
         path = std::string(value);
-        loadSample(value);
+        //loadSample(value);
         makeSFZ();
     }
 }
@@ -1299,7 +1301,7 @@ void DropsPlugin::makeSFZ()
 
 /* Main Audio and MIDI processing function */
 void DropsPlugin::run(
-    const float **,              // incoming audio
+    const float **inputs,        // incoming audio
     float **outputs,             // outgoing audio
     uint32_t frames,             // size of block to process
     const MidiEvent *midiEvents, // MIDI pointer
@@ -1405,7 +1407,15 @@ void DropsPlugin::run(
         } // midi events
         ++framesDone;
     } // frames loop
-    synth.renderBlock(outputs, frames, 2);
+   // synth.renderBlock(outputs, frames, 2);
+
+        for (int pos = 0; pos < frames; pos++)
+        {
+            float sum_mono = (inputs[0][pos] + inputs[1][pos]) * 0.5f;
+            waveForm.insert(waveForm.begin() + buffer + pos,(sum_mono) * float(display_height / 2));
+            if (buffer - pos > 2000) buffer = 0;
+        }
+        buffer += frames;
 } // run
 
 /* Plugin entry point, called by DPF to create a new plugin instance. */

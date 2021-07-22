@@ -24,6 +24,7 @@
 #define NANOSVGRAST_IMPLEMENTATION
 #include "nanosvgrast.h"
 
+
 using namespace artwork;
 
 START_NAMESPACE_DISTRHO
@@ -89,6 +90,15 @@ DropsUI::DropsUI()
     filterLFOSyncFreq = 0.0f;
     ampLFOFreq = 0.0f;
     ampLFOSyncFreq = 0.0f;
+
+    Window &pw = getParentWindow();
+    pw.addIdleCallback(this);
+}
+
+void DropsUI::idleCallback()
+{    
+  // do some stuff and
+  repaint();
 }
 
 DropsUI::~DropsUI()
@@ -862,13 +872,14 @@ void DropsUI::onNanoDisplay()
     fill();
     closePath();
 
-    if (showWaveForm)
-    {
+    //if (showWaveForm)
+    //{
         drawWaveform();
-        drawMinimap();
-        drawLoopMarkers();
-        drawInOutMarkers();
-    }
+        //repaint();
+    //    drawMinimap();
+    //    drawLoopMarkers();
+    //    drawInOutMarkers();
+    //}
 
     // draw logos
     uint w = dropsLogo->getWidth();
@@ -1061,29 +1072,35 @@ void DropsUI::drawWaveform()
 
     fIndex = float(viewStart) + float(samples_per_pixel);
     iIndex = fIndex;
-    beginPath();
-    strokeColor(pale_silver);
-    strokeWidth(1.0f);
-    moveTo(display_left, display_center);
+    
+        //std::cout << "drawing waveform" << std::endl;
 
-    for (uint16_t i = 0; i < display_width; i++)
-    {
-        fIndex = float(viewStart) + (float(i) * samples_per_pixel);
-        iIndex = fIndex;
-        auto minmax = std::minmax_element(waveForm->begin() + iIndex, waveForm->begin() + iIndex + int(samples_per_pixel));
-        uint16_t min = *minmax.first + display_center;
-        uint16_t max = *minmax.second + display_center;
-        lineTo(i + display_left, min);
-        lineTo(i + display_left, max);
-    }
-    stroke();
-    closePath();
-    // center line
-    beginPath();
-    moveTo(display_left, display_center);
-    lineTo(display_right, display_center);
-    stroke();
-    closePath();
+        beginPath();
+        strokeColor(pale_silver);
+        strokeWidth(1.0f);
+        moveTo(display_left, display_center);
+
+
+
+        for (uint16_t i = 0; i < display_width; i++)
+        {
+            fIndex = float(viewStart) + (float(i) * samples_per_pixel);
+            iIndex = fIndex;
+            auto minmax = std::minmax_element(waveForm->begin() + iIndex, waveForm->begin() + iIndex + int(samples_per_pixel));
+            uint16_t min = *minmax.first + display_center;
+            uint16_t max = *minmax.second + display_center;
+            lineTo(i + display_left, min);
+            lineTo(i + display_left, max);
+        }
+        stroke();
+        closePath();
+        // center line
+        beginPath();
+        moveTo(display_left, display_center);
+        lineTo(display_right, display_center);
+        stroke();
+        closePath();
+
 }
 
 void DropsUI::drawMinimap()
