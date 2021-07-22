@@ -23,7 +23,9 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------
 
-DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2), waveForm(2000)
+DropsPlugin::DropsPlugin():
+    Plugin(kParameterCount, 0, 2)
+    ,waveForm(2000)
 {
 
     sampleRate = getSampleRate();
@@ -90,7 +92,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2), waveForm(2000)
 
     client = synth.createClient(&messageList);
 
-    buffer = 0;
+    audioBuffer.resize(10*sampleRate); //10 second buffer
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -1409,13 +1411,22 @@ void DropsPlugin::run(
     } // frames loop
    // synth.renderBlock(outputs, frames, 2);
 
+        //write audio input into buffer
         for (int pos = 0; pos < frames; pos++)
         {
-            float sum_mono = (inputs[0][pos] + inputs[1][pos]) * 0.5f;
-            waveForm.insert(waveForm.begin() + buffer + pos,(sum_mono) * float(display_height / 2));
-            if (buffer - pos > 2000) buffer = 0;
+            audioBuffer[bufferPos] = inputs[0][pos];
+            bufferPos++;
+            if (bufferPos > audioBuffer.size()) bufferPos = 0;
         }
-        buffer += frames;
+        int increment = audioBuffer.size()/display_width;
+
+        waveForm.clear();
+        //convert audio buffer into low quality buffer
+        for (int pos = 0; pos < (sampleRate * 10) ; pos+=increment)
+        {
+            waveForm.push_back(audioBuffer[pos]* float(display_height / 2));
+        }
+        
 } // run
 
 /* Plugin entry point, called by DPF to create a new plugin instance. */
