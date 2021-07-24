@@ -23,6 +23,8 @@
 #include "DropsParams.h"
 #include "DropsGeometry.hpp"
 #include "sfizz.hpp"
+#include "GrainPlayer.hpp"
+
 #include <iostream>
 #include <sndfile.hh>
 #include <unordered_map>
@@ -33,6 +35,12 @@
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
+
+typedef struct {
+    std::vector<float> L;
+    std::vector<float> R;
+}st_audio;
+
 
 class DropsPlugin : public Plugin
 {
@@ -137,6 +145,7 @@ private:
     float fPitchEGDepth, fPitchEGAttack, fPitchEgDecay, fPitchEgSustain,
         fPitchEgRelease, fPitchLFOType, fPitchLFOSync, fPitchLFOFreq, fPitchLFOSyncFreq, fPitchLFODepth,
         fPitchLFOFade;
+    bool recTrue;
 
     double fFilterMaxFreq;
     float bpm;
@@ -196,7 +205,17 @@ private:
     const float lfo_fade = 10.f;
 
     int bufferPos;
+
+
+
     std::vector<float> audioBuffer;
+    st_audio st_audioBuffer;
+
+    GrainPlayer grainPlayer;
+
+    int grainStart = {0};
+
+
 
     friend class DropsUI;
     /*

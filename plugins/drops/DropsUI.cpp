@@ -655,12 +655,14 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kAmpLFOFreq:
         if (ampLFOSync)
         {
-            fAmpLFOFreq->setValue(value);
+            //fAmpLFOFreq->setValue(value);
+            //plugin->recTrue = true;
         }
         else
         {
-            value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
-            fAmpLFOFreq->setValue(value);
+            //plugin->recTrue = false;
+            //value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
+            //fAmpLFOFreq->setValue(value);
         }
         repaint();
         break;
@@ -2041,21 +2043,15 @@ void DropsUI::onCheckBoxClicked(CheckBox *checkbox, bool is_checked)
     switch (id)
     {
     case kAmpLFOSync:
-        ampLFOSync = is_checked;
-        knobToSync(fAmpLFOFreq, is_checked);
-        if (is_checked)
+        if (plugin->recTrue)
         {
-            fAmpLFOFreq->setValue(ampLFOSyncFreq);
+            plugin->recTrue = false;
         }
         else
         {
-            // denormalize
-            const float max = fAmpLFOFreq->max;
-            const float min = fAmpLFOFreq->min;
-            const float denormVal = ampLFOFreq * (max - min) + min;
-            fAmpLFOFreq->setValue(denormVal);
+            plugin->recTrue = true;
         }
-        setParameterValue(kAmpLFOSync, value);
+        //setParameterValue(kAmpLFOSync, value);
         break;
     case kFilterLFOSync:
         filterLFOSync = is_checked;

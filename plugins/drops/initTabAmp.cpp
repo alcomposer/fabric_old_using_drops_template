@@ -159,7 +159,7 @@ void DropsUI::initTabAmp()
                          reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                          fonts::Roboto_RegularDataSize);
     fAmpLFOSync->margin = 6.f;
-    fAmpLFOSync->label = "SYNC";
+    fAmpLFOSync->label = "REC";
     fAmpLFOSync->boxSize = 20;
     fAmpLFOSync->labelSize = font_size;
 

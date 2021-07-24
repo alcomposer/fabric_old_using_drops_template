@@ -19,6 +19,8 @@
 #include "DistrhoPlugin.hpp"
 #include "DropsPlugin.hpp"
 
+#include <random>
+
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------
@@ -26,6 +28,7 @@ START_NAMESPACE_DISTRHO
 DropsPlugin::DropsPlugin():
     Plugin(kParameterCount, 0, 2)
     ,waveForm(2000)
+    ,grainPlayer()
 {
 
     sampleRate = getSampleRate();
@@ -93,6 +96,12 @@ DropsPlugin::DropsPlugin():
     client = synth.createClient(&messageList);
 
     audioBuffer.resize(10*sampleRate); //10 second buffer
+    st_audioBuffer.L.resize(10*sampleRate);
+    st_audioBuffer.R.resize(10*sampleRate);
+
+    recTrue = false;
+
+
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -1412,19 +1421,37 @@ void DropsPlugin::run(
    // synth.renderBlock(outputs, frames, 2);
 
         //write audio input into buffer
-        for (int pos = 0; pos < frames; pos++)
-        {
-            audioBuffer[bufferPos] = inputs[0][pos];
-            bufferPos++;
-            if (bufferPos > audioBuffer.size()) bufferPos = 0;
+        if (recTrue){
+            for (int pos = 0; pos < frames; pos++)
+            {
+                st_audioBuffer.L[bufferPos] = inputs[0][pos];
+                st_audioBuffer.R[bufferPos] = inputs[1][pos];
+                bufferPos++;
+                if (bufferPos > st_audioBuffer.L.size()) bufferPos = 0;
+            }
         }
+
+        for (int pos = 0; pos < frames; pos++){
+            if (grainStart == 0){
+                float startPos = float(std::rand() % 1000000) / 1000000;
+                grainPlayer.add(startPos, 44100, &st_audioBuffer.L, 1000);
+            }
+            grainStart > 1000 ? grainStart = 0 : grainStart++;
+
+            outputs[0][pos] = outputs[1][pos] = grainPlayer.process();
+        };
+        
+
+
+
+
         int increment = audioBuffer.size()/display_width;
 
         waveForm.clear();
         //convert audio buffer into low quality buffer
         for (int pos = 0; pos < (sampleRate * 10) ; pos+=increment)
         {
-            waveForm.push_back(audioBuffer[pos]* float(display_height / 2));
+            waveForm.push_back(((st_audioBuffer.L[pos] + st_audioBuffer.R[pos]) * 0.5) * float(display_height * 0.5));
         }
         
 } // run
