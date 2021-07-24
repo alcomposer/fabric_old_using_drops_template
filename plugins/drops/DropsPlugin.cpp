@@ -96,8 +96,7 @@ DropsPlugin::DropsPlugin():
     client = synth.createClient(&messageList);
 
     audioBuffer.resize(10*sampleRate); //10 second buffer
-    st_audioBuffer.L.resize(10*sampleRate);
-    st_audioBuffer.R.resize(10*sampleRate);
+    st_audioBuffer.resize(10*sampleRate);
 
     recTrue = false;
 
@@ -1424,21 +1423,22 @@ void DropsPlugin::run(
         if (recTrue){
             for (int pos = 0; pos < frames; pos++)
             {
-                st_audioBuffer.L[bufferPos] = inputs[0][pos];
-                st_audioBuffer.R[bufferPos] = inputs[1][pos];
+                st_audioBuffer[bufferPos].first = inputs[0][pos];
+                st_audioBuffer[bufferPos].second = inputs[1][pos];
                 bufferPos++;
-                if (bufferPos > st_audioBuffer.L.size()) bufferPos = 0;
+                if (bufferPos > st_audioBuffer.size()) bufferPos = 0;
             }
         }
-
         for (int pos = 0; pos < frames; pos++){
             if (grainStart == 0){
                 float startPos = float(std::rand() % 1000000) / 1000000;
-                grainPlayer.add(startPos, 44100, &st_audioBuffer.L, 1000);
+                grainPlayer.add(startPos, 44100, &st_audioBuffer, 1000);
             }
             grainStart > 1000 ? grainStart = 0 : grainStart++;
 
-            outputs[0][pos] = outputs[1][pos] = grainPlayer.process();
+            std::pair<float,float> output = grainPlayer.process();
+            outputs[0][pos] = output.first;
+            outputs[1][pos] = output.second;
         };
         
 
@@ -1451,7 +1451,7 @@ void DropsPlugin::run(
         //convert audio buffer into low quality buffer
         for (int pos = 0; pos < (sampleRate * 10) ; pos+=increment)
         {
-            waveForm.push_back(((st_audioBuffer.L[pos] + st_audioBuffer.R[pos]) * 0.5) * float(display_height * 0.5));
+            waveForm.push_back(((st_audioBuffer[pos].first + st_audioBuffer[pos].second) * 0.5) * float(display_height * 0.5));
         }
         
 } // run

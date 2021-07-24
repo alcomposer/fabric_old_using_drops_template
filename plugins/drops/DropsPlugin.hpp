@@ -32,6 +32,7 @@
 #include <iostream>
 #include <sstream>
 #include <mutex>
+#include <vector>
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -209,7 +210,7 @@ private:
 
 
     std::vector<float> audioBuffer;
-    st_audio st_audioBuffer;
+    std::vector<std::pair<float,float>> st_audioBuffer;
 
     GrainPlayer grainPlayer;
 
