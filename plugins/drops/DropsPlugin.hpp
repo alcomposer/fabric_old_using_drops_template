@@ -33,6 +33,7 @@
 #include <sstream>
 #include <mutex>
 #include <vector>
+#include <utility>
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -206,10 +207,6 @@ private:
     const float lfo_fade = 10.f;
 
     int bufferPos;
-
-
-
-    std::vector<float> audioBuffer;
     std::vector<std::pair<float,float>> st_audioBuffer;
 
     GrainPlayer grainPlayer;

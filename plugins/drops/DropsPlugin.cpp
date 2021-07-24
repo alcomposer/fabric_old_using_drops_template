@@ -29,6 +29,7 @@ DropsPlugin::DropsPlugin():
     Plugin(kParameterCount, 0, 2)
     ,waveForm(2000)
     ,grainPlayer()
+    ,bufferPos(0)
 {
 
     sampleRate = getSampleRate();
@@ -95,8 +96,9 @@ DropsPlugin::DropsPlugin():
 
     client = synth.createClient(&messageList);
 
-    audioBuffer.resize(10*sampleRate); //10 second buffer
     st_audioBuffer.resize(10*sampleRate);
+
+    bufferPos = 0;
 
     recTrue = false;
 
@@ -207,14 +209,14 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         };
         parameter.hints = kParameterIsInteger;
         break;
-    case kAmpEgAttack:
-        parameter.name = "Amp Attack";
-        parameter.symbol = "amp_attack";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
+    //case kAmpEgAttack:
+    //    parameter.name = "Amp Attack";
+    //    parameter.symbol = "amp_attack";
+    //    parameter.ranges.min = 0.0f;
+    //    parameter.ranges.max = 1.0f;
+    //    parameter.ranges.def = 0.0f;
+    //    parameter.hints = kParameterIsAutomable;
+    //    break;
     case kAmpEgDecay:
         parameter.name = "Amp Decay";
         parameter.symbol = "amp_decay";
@@ -624,9 +626,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
         val = fSampleOversampling;
         break;
         // amp
-    case kAmpEgAttack:
-        val = fAmpEGAttack;
-        break;
+   // case kAmpEgAttack:
+   //     val = fAmpEGAttack;
+   //     break;
     case kAmpEgDecay:
         val = fAmpEgDecay;
         break;
@@ -810,9 +812,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     //}
     // amp
-    case kAmpEgAttack:
-        fAmpEGAttack = value;
-        break;
+    //case kAmpEgAttack:
+    //    fAmpEGAttack = value;
+    //    break;
     case kAmpEgDecay:
         fAmpEgDecay = value;
         break;
@@ -1432,7 +1434,7 @@ void DropsPlugin::run(
         for (int pos = 0; pos < frames; pos++){
             if (grainStart == 0){
                 float startPos = float(std::rand() % 1000000) / 1000000;
-                grainPlayer.add(startPos, 44100, &st_audioBuffer, 1000);
+                grainPlayer.add(startPos, 44100, GRAIN_DIR::forward, &st_audioBuffer, 1000);
             }
             grainStart > 1000 ? grainStart = 0 : grainStart++;
 
@@ -1445,7 +1447,7 @@ void DropsPlugin::run(
 
 
 
-        int increment = audioBuffer.size()/display_width;
+        int increment = st_audioBuffer.size()/display_width;
 
         waveForm.clear();
         //convert audio buffer into low quality buffer

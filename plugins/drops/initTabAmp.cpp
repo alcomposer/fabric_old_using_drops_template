@@ -44,25 +44,25 @@ void DropsUI::initTabAmp()
     hbox_amp_row_2->setHeight(sz);
     hbox_amp_row_2->setWidth(vbox_amp->getWidth() * 0.9);
 
-    fAmpEgAttack = new Knob(hbox_amp_row_1);
-    fAmpEgAttack->setId(kAmpEgAttack);
-    fAmpEgAttack->setSize(knobSize);
-    fAmpEgAttack->setCallback(this);
-    fAmpEgAttack->labelSize = font_size;
-    fAmpEgAttack->gauge_width = gauge;
-    fAmpEgAttack->margin = margin;
-    fAmpEgAttack->label = "ATTACK";
-    fAmpEgAttack->foreground_color = saffron;
-    fAmpEgAttack->background_color = black_olive;
-    fAmpEgAttack->highlight_color = saffron_1;
-    fAmpEgAttack->text_color = floral_white;
-    fAmpEgAttack->real_min = 0.0f;
-    fAmpEgAttack->real_max = 10.0f;
-    fAmpEgAttack->min = 1.0f;
-    fAmpEgAttack->max = 101.f;
-    fAmpEgAttack->format_str = "%.2f s";
-    fAmpEgAttack->using_log = true;
-    fAmpEgAttack->setParamOnMove = true;
+    //fAmpEgAttack = new Knob(hbox_amp_row_1);
+    //fAmpEgAttack->setId(kAmpEgAttack);
+    //fAmpEgAttack->setSize(knobSize);
+    //fAmpEgAttack->setCallback(this);
+    //fAmpEgAttack->labelSize = font_size;
+    //fAmpEgAttack->gauge_width = gauge;
+    //fAmpEgAttack->margin = margin;
+    //fAmpEgAttack->label = "ATTACK";
+    //fAmpEgAttack->foreground_color = saffron;
+    //fAmpEgAttack->background_color = black_olive;
+    //fAmpEgAttack->highlight_color = saffron_1;
+    //fAmpEgAttack->text_color = floral_white;
+    //fAmpEgAttack->real_min = 0.0f;
+    //fAmpEgAttack->real_max = 10.0f;
+    //fAmpEgAttack->min = 1.0f;
+    //fAmpEgAttack->max = 101.f;
+    //fAmpEgAttack->format_str = "%.2f s";
+    //fAmpEgAttack->using_log = true;
+    //fAmpEgAttack->setParamOnMove = true;
 
     fAmpEgDecay = new Knob(hbox_amp_row_1);
     fAmpEgDecay->setId(kAmpEgDecay);
@@ -82,7 +82,7 @@ void DropsUI::initTabAmp()
     fAmpEgDecay->max = 101.f;
     fAmpEgDecay->using_log = true;
     fAmpEgDecay->format_str = "%.2f s";
-    fAmpEgAttack->setParamOnMove = true;
+    //fAmpEgAttack->setParamOnMove = true;
 
     fAmpEgSustain = new Knob(hbox_amp_row_1);
     fAmpEgSustain->setId(kAmpEgSustain);
@@ -121,7 +121,7 @@ void DropsUI::initTabAmp()
     fAmpEgRelease->using_log = true;
     fAmpEgRelease->setParamOnMove = true;
 
-    hbox_amp_row_1->addWidget(fAmpEgAttack);
+    //hbox_amp_row_1->addWidget(fAmpEgAttack);
     hbox_amp_row_1->addWidget(fAmpEgDecay);
     hbox_amp_row_1->addWidget(fAmpEgSustain);
     hbox_amp_row_1->addWidget(fAmpEgRelease);

@@ -91,7 +91,7 @@ DropsUI::DropsUI()
     ampLFOFreq = 0.0f;
     ampLFOSyncFreq = 0.0f;
 
-    Window &pw = getParentWindow();
+    Window &pw = getParentWindow(); //this is needed to refresh the waveform
     pw.addIdleCallback(this);
 }
 
@@ -522,7 +522,7 @@ void DropsUI::initWidgets()
     fAmpLFOFreq->setPopUp(fPopUp);
     fAmpLFODepth->setPopUp(fPopUp);
     fAmpLFOFade->setPopUp(fPopUp);
-    fAmpEgAttack->setPopUp(fPopUp);
+    //fAmpEgAttack->setPopUp(fPopUp);
     fAmpEgDecay->setPopUp(fPopUp);
     fAmpEgSustain->setPopUp(fPopUp);
     fAmpEgRelease->setPopUp(fPopUp);
@@ -626,11 +626,11 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         value = (fAmpLFOFade->max - fAmpLFOFade->min) * value + fAmpLFOFade->min;
         fAmpLFOFade->setValue(value);
         break;
-    case kAmpEgAttack:
-        value = (fAmpEgAttack->max - fAmpEgAttack->min) * value + fAmpEgAttack->min;
-        fAmpEgAttack->setValue(value);
-        repaint();
-        break;
+    //case kAmpEgAttack:
+    //    value = (fAmpEgAttack->max - fAmpEgAttack->min) * value + fAmpEgAttack->min;
+    //    fAmpEgAttack->setValue(value);
+    //    repaint();
+    //    break;
     case kAmpEgDecay:
         value = (fAmpEgDecay->max - fAmpEgDecay->min) * value + fAmpEgDecay->min;
         fAmpEgDecay->setValue(value);
@@ -1107,7 +1107,7 @@ void DropsUI::drawWaveform()
         beginPath();
         strokeColor(255,0,0); //change to an enum
         strokeWidth(2.0f);
-        float playheadPos = display_left + (float)plugin->bufferPos / plugin->audioBuffer.size() * display_width;
+        float playheadPos = display_left + (float)plugin->bufferPos / plugin->st_audioBuffer.size() * display_width;
         moveTo(playheadPos, display_top);
         lineTo(playheadPos, display_bottom);
         stroke();
@@ -1599,9 +1599,9 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
 
     switch (id)
     {
-    case kAmpEgAttack:
-        setParameterValue(kAmpEgAttack, value);
-        break;
+   // case kAmpEgAttack:
+   //     setParameterValue(kAmpEgAttack, value);
+   //     break;
     case kAmpEgDecay:
         setParameterValue(kAmpEgDecay, value);
         break;
@@ -1722,9 +1722,9 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 
     switch (id)
     {
-    case kAmpEgAttack:
-        setParameterValue(kAmpEgAttack, value);
-        break;
+    //case kAmpEgAttack:
+    //    setParameterValue(kAmpEgAttack, value);
+    //    break;
     case kAmpEgDecay:
         setParameterValue(kAmpEgDecay, value);
         break;
