@@ -170,38 +170,18 @@ void DropsUI::initTabAmp()
     fAmpLFOFreq->labelSize = font_size;
     fAmpLFOFreq->gauge_width = gauge;
     fAmpLFOFreq->margin = margin;
-    fAmpLFOFreq->label = "FREQ";
+    fAmpLFOFreq->label = "";
     fAmpLFOFreq->background_color = black_olive;
     fAmpLFOFreq->foreground_color = saffron;
     fAmpLFOFreq->highlight_color = saffron_1;
     fAmpLFOFreq->text_color = floral_white;
-    fAmpLFOFreq->default_value = 0;
-    fAmpLFOFreq->real_min = 0.0f;
-    fAmpLFOFreq->real_max = 20.f;
+    fAmpLFOFreq->default_value = 500.f;
+    fAmpLFOFreq->real_min = 1.0f;
+    fAmpLFOFreq->real_max = 1000.f;
     fAmpLFOFreq->min = 1.0f;
-    fAmpLFOFreq->max = 101.f;
+    fAmpLFOFreq->max = 1000.0f;
     fAmpLFOFreq->format_str = "%.2f Hz";
     fAmpLFOFreq->using_log = false;
-    fAmpLFOFreq->setStepText({
-        "1/16",
-        "1/8",
-        "1/4",
-        "1/2",
-        "1/1",
-        "2/1",
-        "1/16T",
-        "1/8T",
-        "1/4T",
-        "1/2T",
-        "1/1T",
-        "2/1T",
-        "1/16.",
-        "1/8.",
-        "1/4.",
-        "1/2.",
-        "1/1.",
-        "2/1.",
-    });
     fAmpLFOFreq->setParamOnMove = true;
 
     fAmpLFODepth = new Knob(hbox_amp_row_2);
@@ -211,15 +191,18 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->labelSize = font_size;
     fAmpLFODepth->gauge_width = gauge;
     fAmpLFODepth->margin = margin;
-    fAmpLFODepth->label = "DEPTH";
+    fAmpLFODepth->label = "DENSITY";
     fAmpLFODepth->background_color = black_olive;
     fAmpLFODepth->foreground_color = saffron;
     fAmpLFODepth->highlight_color = saffron_1;
     fAmpLFODepth->text_color = floral_white;
-    fAmpLFODepth->default_value = 0.0f;
-    fAmpLFODepth->real_min = 0.0f;
-    fAmpLFODepth->real_max = 12.f;
-    fAmpLFODepth->format_str = "%.f dB";
+    fAmpLFODepth->default_value = 500.f;
+    fAmpLFODepth->real_min = 1.f;
+    fAmpLFODepth->real_max = 1000.f;
+    fAmpLFODepth->min = 1.f;
+    fAmpLFODepth->max = 1000.f;
+    fAmpLFODepth->format_str = "%.2f Hz";
+    fAmpLFODepth->using_log = false;
     fAmpLFODepth->setParamOnMove = true;
 
     fAmpLFOFade = new Knob(hbox_amp_row_2);

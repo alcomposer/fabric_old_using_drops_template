@@ -199,7 +199,7 @@ private:
     sfz::ClientPtr client;
 
     // some constants
-    const float lfo_max_freq = 20.0f;
+    const float lfo_max_freq = 1000.0f;
     const float filter_eg_depth = 12000.0f;
     const float pitch_eg_depth = 2400.0f; // 2 octave
     const float amp_lfo_depth = 12.f;

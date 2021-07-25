@@ -57,7 +57,7 @@ DropsPlugin::DropsPlugin():
     fAmpLFOSyncFreq = 0.0f;
     fAmpLFOFade = 0.0f;
     fAmpLFOFreq = 0.0f;
-    fAmpLFODepth = 0.0f;
+    fAmpLFODepth = 500.0f; //------ using this as DENSITY
     fAmpLFOFade = 0.0f;
     fAmpLFOSync = 0.0f;
 
@@ -269,9 +269,9 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
     case kAmpLFOFreq:
         parameter.name = "Amp LFO Freq";
         parameter.symbol = "amp_lfo_freq";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.min = 1.0f;
+        parameter.ranges.max = 1000.0f;
+        parameter.ranges.def = 500.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kAmpLFOSyncFreq:
@@ -306,9 +306,9 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
     case kAmpLFODepth:
         parameter.name = "Amp LFO Depth";
         parameter.symbol = "amp_lfo_depth";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.min = 1.0f;
+        parameter.ranges.max = 1000.0f;
+        parameter.ranges.def = 500.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kAmpLFOFade:
@@ -1431,21 +1431,25 @@ void DropsPlugin::run(
                 if (bufferPos > st_audioBuffer.size()) bufferPos = 0;
             }
         }
+        int density = (int)(fAmpLFODepth*1000);
+
         for (int pos = 0; pos < frames; pos++){
             if (grainStart == 0){
+                std::cout << "grainstarting, array length is: " << grainPlayer.grain_array_length << std::endl;
                 float startPos = float(std::rand() % 1000000) / 1000000;
-                grainPlayer.add(startPos, 44100, GRAIN_DIR::forward, &st_audioBuffer, 1000);
+                grainPlayer.add(startPos, 44100, GRAIN_DIR::forward, &st_audioBuffer, 128);
             }
-            grainStart > 1000 ? grainStart = 0 : grainStart++;
+            if (grainStart > 1000){
+                grainStart = 0;
+            }else{
+                grainStart++;
+            }
+            //std::cout << "grainstart is: " << grainStart << std::endl;
 
             std::pair<float,float> output = grainPlayer.process();
             outputs[0][pos] = output.first;
             outputs[1][pos] = output.second;
         };
-        
-
-
-
 
         int increment = st_audioBuffer.size()/display_width;
 
