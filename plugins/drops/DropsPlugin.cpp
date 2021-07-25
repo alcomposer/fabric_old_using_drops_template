@@ -1435,11 +1435,11 @@ void DropsPlugin::run(
 
         for (int pos = 0; pos < frames; pos++){
             if (grainStart == 0){
-                std::cout << "grainstarting, array length is: " << grainPlayer.grain_array_length << std::endl;
+                //std::cout << "grainstarting, array length is: " << grainPlayer.grain_array_length << std::endl;
                 float startPos = float(std::rand() % 1000000) / 1000000;
                 grainPlayer.add(startPos, 44100, GRAIN_DIR::forward, &st_audioBuffer, 128);
             }
-            if (grainStart > 1000){
+            if (grainStart > density){
                 grainStart = 0;
             }else{
                 grainStart++;

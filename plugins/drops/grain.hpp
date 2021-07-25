@@ -41,7 +41,7 @@ struct Grain
     unsigned int age = 0;
     unsigned int lifespan = 0;
     float pitch = 0;
-    bool erase_me = false;
+    bool erase_me = true;
     GRAIN_DIR direction = GRAIN_DIR::forward;
 
     Grain()
