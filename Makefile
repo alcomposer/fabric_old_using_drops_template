@@ -16,7 +16,7 @@ ifeq ($(HAVE_CAIRO_OR_OPENGL),true)
 endif
 
 plugins: dgl
-	$(MAKE) all -C plugins/drops
+	$(MAKE) all -C plugins/fabric
 
 ifneq ($(CROSS_COMPILING),true)
 gen: plugins dpf/utils/lv2_ttl_generator
@@ -35,14 +35,14 @@ endif
 
 clean:
 	$(MAKE) clean -C dpf
-	$(MAKE) clean -C plugins/drops
+	$(MAKE) clean -C plugins/fabric
 	rm -rf bin build
 
 dist-clean:clean
 
 install:
-	cp -r -v bin/drops.lv2/ $(HOME)/.lv2/
-	cp -v bin/drops-vst.so $(HOME)/.vst/
+	cp -r -v bin/Fabric.lv2/ $(HOME)/.lv2/
+	cp -v bin/Fabric-vst.so $(HOME)/.vst/
 # --------------------------------------------------------------
 
 .PHONY: plugins
