@@ -27,4 +27,4 @@
   - [x] forward
   - [ ] reverse
 - [ ] Buffer Logic:
- - [ ] Implement circular buffer with xfade between writehead and readhead
+  - [ ] Implement circular buffer with xfade between writehead and readhead
