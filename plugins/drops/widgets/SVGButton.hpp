@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef SVG_BUTTON_HPP_INCLUDED
-#define SVG_BUTTON_HPP_INCLUDED
+#pragma once
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -60,5 +59,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif // SVG_BUTTON_HPP

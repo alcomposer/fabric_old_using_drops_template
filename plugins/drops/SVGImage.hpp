@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef SVG_IMAGE_HPP_INCLUDED
-#define SVG_IMAGE_HPP_INCLUDED
+#pragma once
+
 #include "NanoVG.hpp"
 #include "nanosvg.h"
 #include "nanosvgrast.h"
@@ -62,5 +62,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif

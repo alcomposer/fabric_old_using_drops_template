@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef DROPS_DIMENSIONS_INCLUDED
-#define DROPS_DIMENSIONS_INCLUDED
+#pragma once
 
 #include "Geometry.hpp"
 
@@ -35,5 +34,3 @@ extern const unsigned int minimap_height;
 extern const unsigned int sample_inout_font_size;
 
 END_NAMESPACE_DISTRHO
-
-#endif

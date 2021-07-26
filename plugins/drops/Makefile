@@ -57,13 +57,9 @@ FILES_UI  = \
 # Do some magic
 
 include ../../dpf/Makefile.plugins.mk
-include ../../sfizz/dpf.mk
 
 # --------------------------------------------------------------
 # Extra flags
-BUILD_C_FLAGS += $(SFIZZ_C_FLAGS)
-BUILD_CXX_FLAGS += $(SFIZZ_CXX_FLAGS)
-LINK_FLAGS += $(SFIZZ_LINK_FLAGS) $(shell $(PKG_CONFIG) --libs sndfile )
 BASE_FLAGS += -I. -I./widgets -I./external/src
 #LINK_FLAGS += $(shell pkg-config --libs sfizz)
 

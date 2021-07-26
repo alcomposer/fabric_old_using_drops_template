@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef TEXT_BUTTON_HPP
-#define TEXT_BUTTON_HPP
+#pragma once
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -61,5 +60,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif // TEXT_BUTTON_HPP

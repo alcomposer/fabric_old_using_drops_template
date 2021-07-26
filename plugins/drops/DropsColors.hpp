@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef COLORS_HPP
-#define COLORS_HPP
+#pragma once
 
 #include "Color.hpp"
 
@@ -75,5 +74,3 @@ $gradient-top-left= linear-gradient(225deg, #fffcf2ff, #ccc5b9ff, #403d39ff, #25
 $gradient-bottom-left= linear-gradient(315deg, #fffcf2ff, #ccc5b9ff, #403d39ff, #252422ff, #eb5e28ff);
 $gradient-radial= radial-gradient(#fffcf2ff, #ccc5b9ff, #403d39ff, #252422ff, #eb5e28ff);
  */
-
-#endif

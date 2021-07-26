@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DISTRHO_PLUGIN_INFO_H_INCLUDED
-#define DISTRHO_PLUGIN_INFO_H_INCLUDED
+#pragma once
 
 #define DISTRHO_PLUGIN_BRAND "Clearly Broken Software"
 #define DISTRHO_PLUGIN_NAME "Drops"
@@ -35,5 +34,3 @@
 #define DISTRHO_PLUGIN_WANT_MIDI_INPUT 1
 #define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 1
 #define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:EffectPlugin"
-
-#endif

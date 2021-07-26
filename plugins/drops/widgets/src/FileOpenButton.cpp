@@ -22,7 +22,7 @@ START_NAMESPACE_DISTRHO
 FileOpenButton::FileOpenButton(Window &parent) noexcept
     : NanoWidget(parent)
 {
-    buttonText = "click to load sample";
+    //buttonText = "click to load sample";
     background_color = Color(0.8f, 0.8f, 0.8f);
     text_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;
@@ -34,7 +34,7 @@ FileOpenButton::FileOpenButton(Window &parent) noexcept
 FileOpenButton::FileOpenButton(Widget *widget) noexcept
     : NanoWidget(widget)
 {
-    buttonText = "click to load sample";
+    //buttonText = "click to load sample";
     background_color = Color(0.8f, 0.8f, 0.8f);
     text_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;

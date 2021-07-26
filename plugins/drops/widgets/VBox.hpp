@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef V_BOX_HPP
-#define V_BOX_HPP
+#pragma once
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -97,5 +96,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif // SCROLLBAR_HPP

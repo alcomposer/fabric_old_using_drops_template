@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DROPSUI_HPP_INCLUDED
-#define DROPSUI_HPP_INCLUDED
+#pragma once
 
 #include "external/src/nanosvg.h"
 #include "external/src/nanosvgrast.h"
@@ -60,7 +59,7 @@ class DropsUI : public UI,
                 public DropDown::Callback,
                 public Menu::Callback,
                 public Slider::Callback,
-                public FileOpenButton::Callback,
+                //public FileOpenButton::Callback,
                 // public RadioButton::Callback,
                 public SVGButton::Callback,
                 public CheckBox::Callback,
@@ -79,7 +78,7 @@ protected:
     bool onScroll(const ScrollEvent &) override;
     bool onMotion(const MotionEvent &) override;
     // void onTextButtonClicked(TextButton *textButton) override;
-    void onFileOpenButtonClicked(FileOpenButton *fileOpenButton) override;
+    //void onFileOpenButtonClicked(FileOpenButton *fileOpenButton) override;
     void onScrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
     void onDropDownClicked(DropDown *dropdown) override;
     void knobDragStarted(Knob *knob) override;
@@ -101,7 +100,7 @@ private:
     void knobToSync(Knob *knob, bool isSynced);
 
     DropsPlugin *plugin;
-    ScopedPointer<FileOpenButton> fileopen_button;
+    //ScopedPointer<FileOpenButton> fileopen_button;
     ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn,
         fSampleOut, fScrollBarLeft, fScrollBarRight;
 
@@ -194,5 +193,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif

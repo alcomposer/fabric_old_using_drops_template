@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef SLIDER_HPP
-#define SLIDER_HPP
+#pragma once
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -94,5 +93,3 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
-
-#endif // SCROLLBAR_HPP

@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DROPS_HPP_INCLUDED
-#define DROPS_HPP_INCLUDED
+#pragma once
 
 #include "DistrhoPlugin.hpp"
 #include "DropsParams.h"
@@ -228,5 +227,3 @@ private:
 // -----------------------------------------------------------------------
 
 END_NAMESPACE_DISTRHO
-
-#endif // DROPS_HPP_INCLUDED

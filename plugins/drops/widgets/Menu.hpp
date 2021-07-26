@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef MENU_HPP
-#define MENU_HPP
+#pragma once
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -85,4 +84,3 @@ private:
 
 END_NAMESPACE_DISTRHO
 
-#endif

@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef SVG_ICONS_INCLUDED
-#define SVG_ICONS_INCLUDED
+#pragma once
 
 #include <string>
 
@@ -39,5 +38,3 @@ namespace artwork
     extern char *filter_lowpass;
 
 } // namespace artwork
-
-#endif

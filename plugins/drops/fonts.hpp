@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef BINARY_FONTS_HPP
-#define BINARY_FONTS_HPP
+#pragma once
 
 namespace fonts
 {
@@ -27,6 +26,4 @@ namespace fonts
     extern const char* drops_iconsData;
     const unsigned int drops_iconsDataSize = 2052;
 }
-
-#endif // BINARY_FONTS_HPP
 

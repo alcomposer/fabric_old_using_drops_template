@@ -81,7 +81,7 @@ DropsUI::DropsUI()
         loadSample();
         std::string filename = plugin->path;
         sampleDir = dirnameOf(filename.c_str());
-        fileopen_button->setText(filename);
+        //fileopen_button->setText(filename);
     }
     ampLFOSync = false;
     filterLFOSync = false;
@@ -108,13 +108,13 @@ DropsUI::~DropsUI()
 void DropsUI::initWidgets()
 {
     Window &window = getParentWindow();
-    fileopen_button = new FileOpenButton(window);
-    fileopen_button->setCallback(this);
-    fileopen_button->setAbsolutePos(238, 0);
-    fileopen_button->setSize(530, 55);
-    fileopen_button->background_color = eerie_black_3;
-    fileopen_button->text_color = floral_white;
-    fileopen_button->font_size = 24.f;
+    //fileopen_button = new FileOpenButton(window);
+    //fileopen_button->setCallback(this);
+    //fileopen_button->setAbsolutePos(238, 0);
+    //fileopen_button->setSize(530, 55);
+    //fileopen_button->background_color = eerie_black_3;
+    //fileopen_button->text_color = floral_white;
+    //fileopen_button->font_size = 24.f;
 
     fScrollBarHandle = new ScrollBar(window);
     fScrollBarHandle->setId(kScrollbarHandle);
@@ -552,7 +552,7 @@ void DropsUI::makeIcons()
     dropsLogo = new SVGImage(this, drops_logo, 1.0f);
     loopLeft = new SVGImage(this, loop_left, 1.0f);
     loopRight = new SVGImage(this, loop_right, 1.0f);
-    clearlyBrokenLogo = new SVGImage(this, artwork::clearly_broken_logo, 0.8f);
+    //clearlyBrokenLogo = new SVGImage(this, artwork::clearly_broken_logo, 0.8f);
 }
 
 std::string DropsUI::dirnameOf(const std::string &fname)
@@ -577,7 +577,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         sig_sampleLoaded = value;
         if (sig_sampleLoaded)
         {
-            fileopen_button->setText(fileName);
+            //fileopen_button->setText(fileName);
             loadSample();
         }
         break;
@@ -883,15 +883,18 @@ void DropsUI::onNanoDisplay()
     // draw logos
     uint w = dropsLogo->getWidth();
     uint h = dropsLogo->getHeight();
-    int x = fileopen_button->getAbsoluteX() / 2 - w / 2;
-    int y = fileopen_button->getHeight() / 2 - h / 2;
-    dropsLogo->drawAt(x, y);
-    const int fo_right = fileopen_button->getAbsoluteX() + fileopen_button->getWidth();
-    const int half_right_space = (width - fo_right) / 2;
+    //int x = fileopen_button->getAbsoluteX() / 2 - w / 2;
+    //int y = fileopen_button->getHeight() / 2 - h / 2;
+    dropsLogo->drawAt(10, 10);
+    //const int fo_right = fileopen_button->getAbsoluteX() + fileopen_button->getWidth();
+    //const int half_right_space = (width - fo_right) / 2;
+
+    /*
     const int half_cb_logo = clearlyBrokenLogo->getWidth() / 2;
     x = fo_right + half_right_space - half_cb_logo;
     y = fileopen_button->getHeight() / 2 - clearlyBrokenLogo->getHeight() / 2;
     clearlyBrokenLogo->drawAt(x, y);
+    */
 
     // VBOX_AMP xywh {12 329 323 176}
     beginPath();
@@ -1376,7 +1379,7 @@ void DropsUI::stateChanged(const char *key, const char *value)
         {
             loadSample();
             sampleDir = dirnameOf(fileName.c_str());
-            fileopen_button->setText(fileName);
+            //fileopen_button->setText(fileName);
         }
     }
 #ifdef DEBUG
@@ -1617,14 +1620,14 @@ bool DropsUI::onMotion(const MotionEvent &ev)
     return false;
 }
 
-void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
-{
-    DGL::Window::FileBrowserOptions opts;
-    opts.title = "Load SFZ";
-    opts.startDir = sampleDir.c_str();
-    opts.buttons.showPlaces = 2;
-    getParentWindow().openFileBrowser(opts);
-}
+//void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
+//{
+//    DGL::Window::FileBrowserOptions opts;
+//    opts.title = "Load SFZ";
+//    opts.startDir = sampleDir.c_str();
+//    opts.buttons.showPlaces = 2;
+//    getParentWindow().openFileBrowser(opts);
+//}
 
 // void DropsUI::onTextButtonClicked(TextButton *tb)
 // {
