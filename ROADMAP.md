@@ -1,27 +1,30 @@
 # Road map of Fabric development
 
-Each checkbox represents a possible release target. Development adds functionality.
-
-- [x] waveform editor:
-  - [ ] in/out points
-  - loop in/out points
-  - plugin state restore
-- [ ] volume and waveform zoom widgets
-- [x] envelope editor widget
-  - SAMPLE
-  - AMP
-  - PITCH
-  - FILTER
-- [x] LFO sliders for AMP, PITCH, FILTER:
-  - DEPTH
-  - fade-in
-  - freq
-  - beat sync
-  - toggle for freq or beat sync
-- [x] loop mode:
-  - one shot
-  - loop
-  - loop sustain
-- [] Grain direction:
-  - forward
-  - reverse
+- [ ] waveform display:
+  - [x] display rec head
+  - [x] display play head
+  - [ ] move rec head with mouse
+  - [ ] move play head with mouse
+  - [ ] show grains as boxes
+  - [x] show spray amount as box
+- [ ] volume control:
+  - [ ] in volume (dry)
+  - [ ] out volume (wet)
+  - [ ] out volume (mix)
+- [ ] Buffer controls:
+  - [x] rec active (button)
+  - [ ] overdub active (button)
+  - [ ] clear bufer (button)  
+- [x] Grain playback control:
+  - [x] Density
+  - [ ] Readhead speed
+  - [ ] Grain length
+- [ ] Grain Envelope controls:
+  - [ ] Sides (taken care of with Tukey window function)
+  - [ ] Tilt (moving apex left/right)
+  - [ ] Curve (move from a convex - straigh - concave shape)
+- [ ] Grain direction:
+  - [x] forward
+  - [ ] reverse
+- [ ] Buffer Logic:
+ - [ ] Implement circular buffer with xfade between writehead and readhead
