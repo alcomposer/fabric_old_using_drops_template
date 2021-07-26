@@ -49,15 +49,14 @@ DropsPlugin::DropsPlugin():
     fSampleOversampling = 1.0f;
     // amp
     //fGrainDensity = 0.0f;
-    fAmpEgDecay = 0.0f;
+    fPlayheadSpeed = 0.0f;  //was fAmpEgDecay
     fGrainDensity = 0.5f;
     fGrainLength = 0.0f;
     fAmpLFOType = 0.0f;
     fAmpLFOSync = 0.0f;
     fAmpLFOSyncFreq = 0.0f;
-    fAmpLFOFade = 0.0f;
+    fSpray = 0.0f; //was fAmpLFOFade
     fAmpLFOFreq = 0.0f;
-    fAmpLFOFade = 0.0f;
     fAmpLFOSync = 0.0f;
 
     // filter
@@ -216,10 +215,10 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
     //    parameter.ranges.def = 0.0f;
     //    parameter.hints = kParameterIsAutomable;
     //    break;
-    case kAmpEgDecay:
-        parameter.name = "Amp Decay";
-        parameter.symbol = "amp_decay";
-        parameter.ranges.min = 0.0f;
+    case kPlayheadSpeed:
+        parameter.name = "Playhead Speed";
+        parameter.symbol = "playhead_speed";
+        parameter.ranges.min = -1.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
@@ -302,9 +301,9 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(17.0f, "2/1."),
         };
         break;
-    case kAmpLFOFade:
-        parameter.name = "Amp LFO Fade";
-        parameter.symbol = "amp_lfo_fade";
+    case kSpray:
+        parameter.name = "SPRAY";
+        parameter.symbol = "spray";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
@@ -616,8 +615,8 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSampleOversampling:
         val = fSampleOversampling;
         break;
-    case kAmpEgDecay:
-        val = fAmpEgDecay;
+    case kPlayheadSpeed:
+        val = fPlayheadSpeed;
         break;
     case kGrainDensity:
         val = fGrainDensity;
@@ -637,8 +636,8 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kAmpLFOSyncFreq:
         val = fAmpLFOSyncFreq;
         break;
-    case kAmpLFOFade:
-        val = fAmpLFOFade;
+    case kSpray:
+        val = fSpray;
         break;
         // filter
     case kFilterType:
@@ -795,8 +794,8 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     //case kAmpEgAttack:
     //    fAmpEGAttack = value;
     //    break;
-    case kAmpEgDecay:
-        fAmpEgDecay = value;
+    case kPlayheadSpeed:
+        fPlayheadSpeed = value;
         break;
     case kGrainDensity:
         fGrainDensity = value;
@@ -817,8 +816,8 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kAmpLFOFreq:
         fAmpLFOFreq = value;
         break;
-    case kAmpLFOFade:
-        fAmpLFOFade = value;
+    case kSpray: // was kAmpLFOFade
+        fSpray = value;
         break;
         // filter
     case kFilterType:
@@ -1173,17 +1172,22 @@ void DropsPlugin::run(
             }
         }
         int densityHz = (int)(sampleRate / (fGrainDensity*1000));
-        //std::cout << "fgraindensity = " << fGrainDensity << std::endl;
-
 
         for (int pos = 0; pos < frames; pos++){
-            playheadPos--;
+            playheadPos += fPlayheadSpeed*4.0-2.0;
             if (playheadPos > st_audioBuffer.size()) playheadPos = 0;
             if (playheadPos < 0) playheadPos = st_audioBuffer.size();
 
             if (grainStart == 0){
-                //std::cout << "grainstarting, array length is: " << grainPlayer.grain_array_length << std::endl;
-                float startPos = float(std::rand() % 1000000) / 1000000;
+                // 0-1 float random number. Buffer is 10 seconds.
+                float normalizedRand = float(std::rand() % 1000000) / 1000000;
+                // first normalize the headpos, then add a random number of 1 second duration and center it on playhead
+                float spray = fSpray;
+                float startPos = playheadPos / st_audioBuffer.size() + normalizedRand * spray - spray * 0.5;
+                if (startPos < 0.0) startPos += 1.0;
+                if (startPos > 1.0) startPos -= 1.0;
+
+
                 grainPlayer.add(startPos, fGrainLength*sampleRate*10, GRAIN_DIR::forward, &st_audioBuffer, 128);
             }
             if (grainStart > densityHz){
@@ -1191,7 +1195,6 @@ void DropsPlugin::run(
             }else{
                 grainStart++;
             }
-            //std::cout << "grainstart is: " << grainStart << std::endl;
 
             std::pair<float,float> output = grainPlayer.process();
             outputs[0][pos] = output.first;

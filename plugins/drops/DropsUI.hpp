@@ -115,11 +115,11 @@ private:
     // amp
     ScopedPointer<VBox> vbox_amp;
     ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
-    ScopedPointer<Knob> fAmpEgAttack, fAmpEgDecay, fGrainDensity, fGrainLength;
+    ScopedPointer<Knob> fAmpEgAttack, fPlayheadSpeed, fGrainDensity, fGrainLength;
     ScopedPointer<DropDown> fAmpLFOType;
     ScopedPointer<CheckBox> fAmpLFOSync;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
-    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFOFade;
+    ScopedPointer<Knob> fAmpLFOFreq, fSpray;
 
     // filter
     ScopedPointer<VBox> vbox_filter;

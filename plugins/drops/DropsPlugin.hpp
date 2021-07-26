@@ -129,15 +129,16 @@ private:
 
     // Parameters
 
+    //FABRIC PARAMETERS
+    float fPlayheadSpeed,fGrainDensity, fGrainLength, fSpray;
+
     //  display
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
     //  sample
     float fSamplePitchKeyCenter, fSamplePitch, fSamplePlayMode,
         fSamplePlayDirection, fSampleOversampling;
     //  amp
-    float fGrainDensity, fAmpEgDecay, fGrainLength,
-        fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq,
-        fAmpLFOFade;
+    float fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq;
     //  filter
     float fFilterType, fFilterCutOff, fFilterResonance, fFilterEGDepth,
         fFilterLFOType, fFilterLFOSync, fFilterLFOFreq, fFilterLFOSyncFreq,

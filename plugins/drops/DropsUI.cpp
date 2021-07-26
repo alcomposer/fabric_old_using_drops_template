@@ -520,9 +520,9 @@ void DropsUI::initWidgets()
     fPopUp->setText("POP UP TEXT");
     fPopUp->hide();
     fAmpLFOFreq->setPopUp(fPopUp);
-    fAmpLFOFade->setPopUp(fPopUp);
+    fSpray->setPopUp(fPopUp); //was fAmpLFOFade
     //fAmpEgAttack->setPopUp(fPopUp);
-    fAmpEgDecay->setPopUp(fPopUp);
+    fPlayheadSpeed->setPopUp(fPopUp); //was fAmpEgDecay
     fGrainDensity->setPopUp(fPopUp);
     fGrainLength->setPopUp(fPopUp);
 
@@ -621,20 +621,21 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         //  fSampleOversampling->setValue(value);
         break;
     // amp
-    case kAmpLFOFade:
-        value = (fAmpLFOFade->max - fAmpLFOFade->min) * value + fAmpLFOFade->min;
-        fAmpLFOFade->setValue(value);
-        break;
+    //case kAmpLFOFade: //ALEX used for spray
+    //    value = (fAmpLFOFade->max - fAmpLFOFade->min) * value + fAmpLFOFade->min;
+    //    fAmpLFOFade->setValue(value);
+    //    break;
     //case kAmpEgAttack:
     //    value = (fAmpEgAttack->max - fAmpEgAttack->min) * value + fAmpEgAttack->min;
     //    fAmpEgAttack->setValue(value);
     //    repaint();
     //    break;
-    case kAmpEgDecay:
-        value = (fAmpEgDecay->max - fAmpEgDecay->min) * value + fAmpEgDecay->min;
-        fAmpEgDecay->setValue(value);
-        repaint();
-        break;
+    //case kPlayheadSpeed: //ALEX we may need this...
+    //    std::cout << "fixing range" << std::endl;
+    //    value = (fPlayheadSpeed->max - fPlayheadSpeed->min) * value + fPlayheadSpeed->min;
+    //    fPlayheadSpeed->setValue(value);
+    //    repaint();
+    //    break;
     case kGrainDensity:
         value = (fGrainDensity->max - fGrainDensity->min) * value + fGrainDensity->min;
         fGrainDensity->setValue(value);
@@ -1101,6 +1102,63 @@ void DropsUI::drawWaveform()
         closePath();
 
 
+        // draw spray region
+        //beginPath();
+        //strokeColor(0,0,255,30); //change to an enum
+        //strokeWidth(2.0f);
+        fillColor(0,0,255,30);
+        bool left_draw_overflow = false;
+        bool right_draw_overflow = false;
+
+        float left_spray_x_overflow = 0.0;
+        float right_spray_x_overflow = 0.0;
+        
+        float playHeadPos = display_left + (float)plugin->playheadPos / plugin->st_audioBuffer.size() * display_width;
+        float sprayOffset = plugin->fSpray * 0.5 * display_width;
+        
+        float left_spray_x = playHeadPos - sprayOffset;
+        float right_spray_x = playHeadPos + sprayOffset;
+
+        if (left_spray_x < 0.0 + display_left){ 
+            left_spray_x_overflow = left_spray_x + display_width;
+            left_spray_x = display_left + 0.0;
+            left_draw_overflow = true;
+        };
+        if (right_spray_x > display_width + display_left){ 
+            right_spray_x_overflow = right_spray_x - display_width;
+            right_spray_x = display_left + display_width;
+            right_draw_overflow = true;
+        };
+        // draw overflow region
+        if (left_draw_overflow){
+            beginPath();
+            moveTo(left_spray_x_overflow, display_top);
+            lineTo(left_spray_x_overflow, display_bottom);
+            lineTo(display_left + display_width, display_bottom);
+            lineTo(display_left + display_width, display_top);
+            fill();
+            closePath();     
+        }  
+        if (right_draw_overflow){
+            beginPath();
+            moveTo(display_left, display_top);
+            lineTo(display_left, display_bottom);
+            lineTo(right_spray_x_overflow, display_bottom);
+            lineTo(right_spray_x_overflow, display_top);
+            fill();
+            closePath();     
+        }  
+        // draw standard region
+        beginPath();
+        moveTo(left_spray_x, display_top);
+        lineTo(left_spray_x, display_bottom);
+        lineTo(right_spray_x, display_bottom);
+        lineTo(right_spray_x, display_top);
+        fill();
+        closePath();
+
+
+        // draw grains
         beginPath();
         strokeColor(0,0,255,150); //change to an enum
         strokeWidth(2.0f);
@@ -1131,7 +1189,6 @@ void DropsUI::drawWaveform()
         beginPath();
         strokeColor(0,0,255,200); //change to an enum
         strokeWidth(2.0f);
-        float playHeadPos = display_left + (float)plugin->playheadPos / plugin->st_audioBuffer.size() * display_width;
         moveTo(playHeadPos, display_top);
         lineTo(playHeadPos, display_bottom);
         stroke();
@@ -1626,8 +1683,8 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
    // case kAmpEgAttack:
    //     setParameterValue(kAmpEgAttack, value);
    //     break;
-    case kAmpEgDecay:
-        setParameterValue(kAmpEgDecay, value);
+    case kPlayheadSpeed:
+        setParameterValue(kPlayheadSpeed, value);
         break;
     case kGrainDensity:
         setParameterValue(kGrainDensity, value);
@@ -1647,8 +1704,8 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
             setParameterValue(kAmpLFOFreq, value);
         }
         break;
-    case kAmpLFOFade:
-        setParameterValue(kAmpLFOFade, value);
+    case kSpray:
+        setParameterValue(kSpray, value);
         break;
 
     // filter
@@ -1745,8 +1802,8 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     //case kAmpEgAttack:
     //    setParameterValue(kAmpEgAttack, value);
     //    break;
-    case kAmpEgDecay:
-        setParameterValue(kAmpEgDecay, value);
+    case kPlayheadSpeed:
+        setParameterValue(kPlayheadSpeed, value);
         break;
     case kGrainDensity:
         setParameterValue(kGrainDensity, value);
@@ -1766,8 +1823,8 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
             setParameterValue(kAmpLFOFreq, value);
         }
         break;
-    case kAmpLFOFade:
-        setParameterValue(kAmpLFOFade, value);
+    case kSpray:
+        setParameterValue(kSpray, value);
         break;
 
     // filter

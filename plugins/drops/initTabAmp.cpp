@@ -64,24 +64,23 @@ void DropsUI::initTabAmp()
     //fAmpEgAttack->using_log = true;
     //fAmpEgAttack->setParamOnMove = true;
 
-    fAmpEgDecay = new Knob(hbox_amp_row_1);
-    fAmpEgDecay->setId(kAmpEgDecay);
-    fAmpEgDecay->setSize(knobSize);
-    fAmpEgDecay->setCallback(this);
-    fAmpEgDecay->labelSize = font_size;
-    fAmpEgDecay->gauge_width = gauge;
-    fAmpEgDecay->margin = margin;
-    fAmpEgDecay->label = "DECAY";
-    fAmpEgDecay->foreground_color = saffron;
-    fAmpEgDecay->background_color = black_olive;
-    fAmpEgDecay->highlight_color = saffron_1;
-    fAmpEgDecay->text_color = floral_white;
-    fAmpEgDecay->real_min = 0.0f;
-    fAmpEgDecay->real_max = 10.f;
-    fAmpEgDecay->min = 1.0f;
-    fAmpEgDecay->max = 101.f;
-    fAmpEgDecay->using_log = true;
-    fAmpEgDecay->format_str = "%.2f s";
+    fPlayheadSpeed = new Knob(hbox_amp_row_1);
+    fPlayheadSpeed->setId(kPlayheadSpeed);
+    fPlayheadSpeed->setSize(knobSize);
+    fPlayheadSpeed->setCallback(this);
+    fPlayheadSpeed->labelSize = font_size;
+    fPlayheadSpeed->gauge_width = gauge;
+    fPlayheadSpeed->margin = margin;
+    fPlayheadSpeed->label = "PLAY SPEED";
+    fPlayheadSpeed->foreground_color = saffron;
+    fPlayheadSpeed->background_color = black_olive;
+    fPlayheadSpeed->highlight_color = saffron_1;
+    fPlayheadSpeed->text_color = floral_white;
+    fPlayheadSpeed->real_min = -1.0f;
+    fPlayheadSpeed->real_max = 1.f;
+    fPlayheadSpeed->min = -1.0f;
+    fPlayheadSpeed->max = 1.f;
+    fPlayheadSpeed->format_str = "%.2f";
     //fAmpEgAttack->setParamOnMove = true;
 
     fGrainDensity = new Knob(hbox_amp_row_1);
@@ -124,10 +123,28 @@ void DropsUI::initTabAmp()
     fGrainLength->using_log = true;
     fGrainLength->setParamOnMove = true;
 
-    //hbox_amp_row_1->addWidget(fAmpEgAttack);
-    hbox_amp_row_1->addWidget(fAmpEgDecay);
+    fSpray = new Knob(hbox_amp_row_1); // was kAmpLFOFade
+    fSpray->setId(kSpray);
+    fSpray->setCallback(this);
+    fSpray->setSize(knobSize);
+    fSpray->labelSize = font_size;
+    fSpray->gauge_width = gauge;
+    fSpray->margin = margin;
+    fSpray->label = "SPRAY";
+    fSpray->background_color = black_olive;
+    fSpray->foreground_color = saffron;
+    fSpray->highlight_color = saffron_1;
+    fSpray->text_color = floral_white;
+    fSpray->default_value = 0.0f;
+    fSpray->real_min = 0.0f;
+    fSpray->real_max = 10.0f;
+    fSpray->format_str = "%.2f sec";
+    fSpray->setParamOnMove = true;
+
+    hbox_amp_row_1->addWidget(fPlayheadSpeed);
     hbox_amp_row_1->addWidget(fGrainDensity);
     hbox_amp_row_1->addWidget(fGrainLength);
+    hbox_amp_row_1->addWidget(fSpray);
 
     // row 2
 
@@ -187,26 +204,6 @@ void DropsUI::initTabAmp()
     fAmpLFOFreq->using_log = false;
     fAmpLFOFreq->setParamOnMove = true;
 
-    fAmpLFOFade = new Knob(hbox_amp_row_2);
-    fAmpLFOFade->setId(kAmpLFOFade);
-    fAmpLFOFade->setCallback(this);
-    fAmpLFOFade->setSize(knobSize);
-    fAmpLFOFade->labelSize = font_size;
-    fAmpLFOFade->gauge_width = gauge;
-    fAmpLFOFade->margin = margin;
-    fAmpLFOFade->label = "FADE";
-    fAmpLFOFade->background_color = black_olive;
-    fAmpLFOFade->foreground_color = saffron;
-    fAmpLFOFade->highlight_color = saffron_1;
-    fAmpLFOFade->text_color = floral_white;
-    fAmpLFOFade->default_value = 0.0f;
-    fAmpLFOFade->real_min = 0.0f;
-    fAmpLFOFade->real_max = 10.0f;
-    fAmpLFOFade->min = 1.0f;
-    fAmpLFOFade->max = 101.f;
-    fAmpLFOFade->format_str = "%.2f s";
-    fAmpLFOFade->using_log = true;
-    fAmpLFOFade->setParamOnMove = true;
 
     fAmpLFOTypeMenu = new Menu(hbox_amp_row_2);
     fAmpLFOTypeMenu->setMaxViewItems(6);
@@ -234,7 +231,6 @@ void DropsUI::initTabAmp()
     hbox_amp_row_2->addWidget(fAmpLFOType);
     hbox_amp_row_2->addWidget(fAmpLFOSync);
     hbox_amp_row_2->addWidget(fAmpLFOFreq);
-    hbox_amp_row_2->addWidget(fAmpLFOFade);
 
     vbox_amp->addWidget(hbox_amp_row_1);
     vbox_amp->addWidget(hbox_amp_row_2);

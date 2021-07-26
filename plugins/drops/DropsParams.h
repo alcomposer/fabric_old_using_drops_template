@@ -42,14 +42,14 @@ enum Parameters
 
    /*    amp tab */
    kAmpEgAttack,  // ampeg_attack
-   kAmpEgDecay,   // ampeg_decay
+   kPlayheadSpeed,   // was kAmpEgDecay
    kGrainDensity, // was kAmpEgSustain
    kGrainLength, // was ampeg_release
    kAmpLFOType,   // lfoN_wave
    kAmpLFOSync,   
    kAmpLFOFreq,   // lfoN_freq
    kAmpLFOSyncFreq,
-   kAmpLFOFade,   // lfoN_fade
+   kSpray,   // was kAmpLFOFade
  
    /* filter tab */
    kFilterType,      // fil_type
