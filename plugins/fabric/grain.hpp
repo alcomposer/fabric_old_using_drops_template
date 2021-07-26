@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/intrusive/list.hpp>
 #include <vector>
 #include <math.h>
 #include <utility>
@@ -40,7 +41,7 @@ inline float float_mod(float a, float b)
     return mod;
 }
 
-struct Grain
+struct Grain : public boost::intrusive::list_base_hook<>
 {
     // Start Position is the offset into the sample where playback should start.
     float start_position;
