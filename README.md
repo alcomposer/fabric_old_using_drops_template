@@ -2,12 +2,6 @@
 
 #### Fabric Delay Line Granular Effect
 
-#### Some of the features:
-
-#### Build instructions
-make 
-make install
-
 **Dependencies**
 
 +  libgl1-mesa-dev 
@@ -21,3 +15,6 @@ git clone --recursive https://github.com/alcomposer/fabric.git
 cd fabric
 make
 ```
+
+Fabric was built using DROPS as a template:
+https://github.com/clearly-broken-software/drops

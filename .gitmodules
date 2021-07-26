@@ -1,6 +1,6 @@
 [submodule "dpf"]
 	path = dpf
 	url = https://github.com/DISTRHO/DPF
-[submodule "plugins/drops/external"]
-	path = plugins/drops/external
+[submodule "plugins/fabric/external"]
+	path = plugins/fabric/external
 	url = https://github.com/memononen/nanosvg.git

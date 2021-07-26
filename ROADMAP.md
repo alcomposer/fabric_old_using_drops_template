@@ -1,9 +1,9 @@
-# Road map of DROPS development
+# Road map of Fabric development
 
 Each checkbox represents a possible release target. Development adds functionality.
 
 - [x] waveform editor:
-  - in/out points
+  - [ ] in/out points
   - loop in/out points
   - plugin state restore
 - [ ] volume and waveform zoom widgets
@@ -22,7 +22,6 @@ Each checkbox represents a possible release target. Development adds functionali
   - one shot
   - loop
   - loop sustain
-- [x] direction:
+- [] Grain direction:
   - forward
   - reverse
-  - ~~palindromic~~
