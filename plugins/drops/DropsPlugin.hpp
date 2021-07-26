@@ -135,8 +135,8 @@ private:
     float fSamplePitchKeyCenter, fSamplePitch, fSamplePlayMode,
         fSamplePlayDirection, fSampleOversampling;
     //  amp
-    float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
-        fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq, fAmpLFODepth,
+    float fGrainDensity, fAmpEgDecay, fGrainLength,
+        fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq,
         fAmpLFOFade;
     //  filter
     float fFilterType, fFilterCutOff, fFilterResonance, fFilterEGDepth,
@@ -199,14 +199,22 @@ private:
     sfz::ClientPtr client;
 
     // some constants
-    const float lfo_max_freq = 1000.0f;
-    const float filter_eg_depth = 12000.0f;
-    const float pitch_eg_depth = 2400.0f; // 2 octave
-    const float amp_lfo_depth = 12.f;
-    const float pitch_lfo_depth = 1200;
-    const float lfo_fade = 10.f;
+    //const float lfo_max_freq = 1000.0f;
+    //const float filter_eg_depth = 12000.0f;
+    //const float pitch_eg_depth = 2400.0f; // 2 octave
+    //const float amp_lfo_depth = 12.f;
+    //const float pitch_lfo_depth = 1200;
+    //const float lfo_fade = 10.f;
+    const float grain_density = 1000.f;
 
     int bufferPos;
+
+    /*
+     * Playhead of Sequencer, not for actual audio playback
+    */
+    float playheadPos = {0.0};
+    
+    
     std::vector<std::pair<float,float>> st_audioBuffer;
 
     GrainPlayer grainPlayer;

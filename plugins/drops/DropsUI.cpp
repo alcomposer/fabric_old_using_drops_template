@@ -520,12 +520,11 @@ void DropsUI::initWidgets()
     fPopUp->setText("POP UP TEXT");
     fPopUp->hide();
     fAmpLFOFreq->setPopUp(fPopUp);
-    fAmpLFODepth->setPopUp(fPopUp);
     fAmpLFOFade->setPopUp(fPopUp);
     //fAmpEgAttack->setPopUp(fPopUp);
     fAmpEgDecay->setPopUp(fPopUp);
-    fAmpEgSustain->setPopUp(fPopUp);
-    fAmpEgRelease->setPopUp(fPopUp);
+    fGrainDensity->setPopUp(fPopUp);
+    fGrainLength->setPopUp(fPopUp);
 
     fFilterCutOff->setPopUp(fPopUp);
     fFilterResonance->setPopUp(fPopUp);
@@ -636,8 +635,9 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fAmpEgDecay->setValue(value);
         repaint();
         break;
-    case kAmpEgSustain:
-        fAmpEgSustain->setValue(value);
+    case kGrainDensity:
+        value = (fGrainDensity->max - fGrainDensity->min) * value + fGrainDensity->min;
+        fGrainDensity->setValue(value);
         repaint();
         break;
     case kAmpLFOType:
@@ -666,13 +666,9 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         }
         repaint();
         break;
-    case kAmpLFODepth:
-        fAmpLFODepth->setValue(value);
-        repaint();
-        break;
-    case kAmpEgRelease:
-        value = (fAmpEgRelease->max - fAmpEgRelease->min) * value + fAmpEgRelease->min;
-        fAmpEgRelease->setValue(value);
+    case kGrainLength:
+        value = (fGrainLength->max - fGrainLength->min) * value + fGrainLength->min;
+        fGrainLength->setValue(value);
         repaint();
         break;
     // filter
@@ -1068,6 +1064,7 @@ void DropsUI::onNanoDisplay()
 void DropsUI::drawWaveform()
 {
     double view = viewEnd - viewStart; // set these when zooming in
+    //double view = getSampleRate() * 10;
     double samples_per_pixel = view / (double)display_width;
     float fIndex;
     uint iIndex;
@@ -1103,13 +1100,40 @@ void DropsUI::drawWaveform()
         stroke();
         closePath();
 
-        // playhead line
+
         beginPath();
-        strokeColor(255,0,0); //change to an enum
+        strokeColor(0,0,255,150); //change to an enum
         strokeWidth(2.0f);
-        float playheadPos = display_left + (float)plugin->bufferPos / plugin->st_audioBuffer.size() * display_width;
-        moveTo(playheadPos, display_top);
-        lineTo(playheadPos, display_bottom);
+        for (int i = 0; i < 128; i++){
+            //std::cout << "drawing grain number: " << i << std::endl;
+            if (plugin->grainPlayer.grain_array[i].erase_me == false){
+                float grainPos = display_left + plugin->grainPlayer.grain_array[i].start_position * display_width;
+                //std::cout << "drawing grain at: " << (float)plugin->grainPlayer.grain_array[i].start_position << std::endl;
+                moveTo(grainPos, display_center - 25);
+                lineTo(grainPos, display_center + 25);
+            }
+        }
+        stroke();
+        closePath();
+
+
+        // rec head line
+        beginPath();
+        strokeColor(255,0,0,200); //change to an enum
+        strokeWidth(2.0f);
+        float recheadPos = display_left + (float)plugin->bufferPos / plugin->st_audioBuffer.size() * display_width;
+        moveTo(recheadPos, display_top);
+        lineTo(recheadPos, display_bottom);
+        stroke();
+        closePath();
+
+        // play head line
+        beginPath();
+        strokeColor(0,0,255,200); //change to an enum
+        strokeWidth(2.0f);
+        float playHeadPos = display_left + (float)plugin->playheadPos / plugin->st_audioBuffer.size() * display_width;
+        moveTo(playHeadPos, display_top);
+        lineTo(playHeadPos, display_bottom);
         stroke();
         closePath();
 }
@@ -1605,11 +1629,11 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
     case kAmpEgDecay:
         setParameterValue(kAmpEgDecay, value);
         break;
-    case kAmpEgSustain:
-        setParameterValue(kAmpEgSustain, value);
+    case kGrainDensity:
+        setParameterValue(kGrainDensity, value);
         break;
-    case kAmpEgRelease:
-        setParameterValue(kAmpEgRelease, value);
+    case kGrainLength:
+        setParameterValue(kGrainLength, value);
         break;
     case kAmpLFOFreq:
         if (ampLFOSync)
@@ -1622,10 +1646,6 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
             ampLFOFreq = value;
             setParameterValue(kAmpLFOFreq, value);
         }
-        break;
-
-    case kAmpLFODepth:
-        setParameterValue(kAmpLFODepth, value);
         break;
     case kAmpLFOFade:
         setParameterValue(kAmpLFOFade, value);
@@ -1728,11 +1748,11 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kAmpEgDecay:
         setParameterValue(kAmpEgDecay, value);
         break;
-    case kAmpEgSustain:
-        setParameterValue(kAmpEgSustain, value);
+    case kGrainDensity:
+        setParameterValue(kGrainDensity, value);
         break;
-    case kAmpEgRelease:
-        setParameterValue(kAmpEgRelease, value);
+    case kGrainLength:
+        setParameterValue(kGrainLength, value);
         break;
     case kAmpLFOFreq:
         if (ampLFOSync)
@@ -1745,9 +1765,6 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
             ampLFOFreq = value;
             setParameterValue(kAmpLFOFreq, value);
         }
-        break;
-    case kAmpLFODepth:
-        setParameterValue(kAmpLFODepth, value);
         break;
     case kAmpLFOFade:
         setParameterValue(kAmpLFOFade, value);
@@ -1862,18 +1879,18 @@ void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
     case kScrollbarHandle:
         scrollbarDragging = dragging;
         break;
-    case kScrollbarLeft:
-        if (!dragging)
-        {
-            scrollWaveform(true);
-        }
-        break;
-    case kScrollbarRight:
-        if (!dragging)
-        {
-            scrollWaveform(false);
-        }
-        break;
+    //case kScrollbarLeft:
+    //    if (!dragging)
+    //    {
+    //        scrollWaveform(true);
+    //    }
+    //    break;
+    //case kScrollbarRight:
+    //    if (!dragging)
+    //    {
+    //        scrollWaveform(false);
+    //    }
+    //    break;
     case kSampleLoopStart:
     {
         loopstartDragging = dragging;

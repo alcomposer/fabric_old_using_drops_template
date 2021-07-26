@@ -43,13 +43,12 @@ enum Parameters
    /*    amp tab */
    kAmpEgAttack,  // ampeg_attack
    kAmpEgDecay,   // ampeg_decay
-   kAmpEgSustain, // ampeg_sustain
-   kAmpEgRelease, // ampeg_release
+   kGrainDensity, // was kAmpEgSustain
+   kGrainLength, // was ampeg_release
    kAmpLFOType,   // lfoN_wave
    kAmpLFOSync,   
    kAmpLFOFreq,   // lfoN_freq
    kAmpLFOSyncFreq,
-   kAmpLFODepth,  // lfoN_amplitude
    kAmpLFOFade,   // lfoN_fade
  
    /* filter tab */

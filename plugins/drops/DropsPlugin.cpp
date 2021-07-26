@@ -48,16 +48,15 @@ DropsPlugin::DropsPlugin():
     fSamplePitch = 100.0f;
     fSampleOversampling = 1.0f;
     // amp
-    fAmpEGAttack = 0.0f;
+    //fGrainDensity = 0.0f;
     fAmpEgDecay = 0.0f;
-    fAmpEgSustain = 1.0f;
-    fAmpEgRelease = 0.0f;
+    fGrainDensity = 0.5f;
+    fGrainLength = 0.0f;
     fAmpLFOType = 0.0f;
     fAmpLFOSync = 0.0f;
     fAmpLFOSyncFreq = 0.0f;
     fAmpLFOFade = 0.0f;
     fAmpLFOFreq = 0.0f;
-    fAmpLFODepth = 500.0f; //------ using this as DENSITY
     fAmpLFOFade = 0.0f;
     fAmpLFOSync = 0.0f;
 
@@ -225,17 +224,17 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kAmpEgSustain:
-        parameter.name = "Amp Sustain";
-        parameter.symbol = "amp_sustain";
-        parameter.ranges.min = 0.0f;
+    case kGrainDensity: //was kampegsustain
+        parameter.name = "Grain Density";
+        parameter.symbol = "grain_density";
+        parameter.ranges.min = 0.f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 1.0f;
+        parameter.ranges.def = 0.5f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kAmpEgRelease:
-        parameter.name = "Amp Release";
-        parameter.symbol = "amp_release";
+    case kGrainLength:
+        parameter.name = "Grain Length";
+        parameter.symbol = "grain_length";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
@@ -302,14 +301,6 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(16.0f, "1/1."),
             ParameterEnumerationValue(17.0f, "2/1."),
         };
-        break;
-    case kAmpLFODepth:
-        parameter.name = "Amp LFO Depth";
-        parameter.symbol = "amp_lfo_depth";
-        parameter.ranges.min = 1.0f;
-        parameter.ranges.max = 1000.0f;
-        parameter.ranges.def = 500.0f;
-        parameter.hints = kParameterIsAutomable;
         break;
     case kAmpLFOFade:
         parameter.name = "Amp LFO Fade";
@@ -625,18 +616,14 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSampleOversampling:
         val = fSampleOversampling;
         break;
-        // amp
-   // case kAmpEgAttack:
-   //     val = fAmpEGAttack;
-   //     break;
     case kAmpEgDecay:
         val = fAmpEgDecay;
         break;
-    case kAmpEgSustain:
-        val = fAmpEgSustain;
+    case kGrainDensity:
+        val = fGrainDensity;
         break;
-    case kAmpEgRelease:
-        val = fAmpEgRelease;
+    case kGrainLength:
+        val = fGrainLength;
         break;
     case kAmpLFOType:
         val = fAmpLFOType;
@@ -649,9 +636,6 @@ float DropsPlugin::getParameterValue(uint32_t index) const
         break;
     case kAmpLFOSyncFreq:
         val = fAmpLFOSyncFreq;
-        break;
-    case kAmpLFODepth:
-        val = fAmpLFODepth;
         break;
     case kAmpLFOFade:
         val = fAmpLFOFade;
@@ -783,10 +767,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         }
         //makeSFZ();
         break;
-    case kSamplePlayDirection:
-        fSamplePlayDirection = value;
-        makeSFZ();
-        break;
     case kSampleOversampling:
         // {
         //     std::lock_guard<std::mutex> lock(synthMutex);
@@ -818,11 +798,11 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kAmpEgDecay:
         fAmpEgDecay = value;
         break;
-    case kAmpEgSustain:
-        fAmpEgSustain = value;
+    case kGrainDensity:
+        fGrainDensity = value;
         break;
-    case kAmpEgRelease:
-        fAmpEgRelease = value;
+    case kGrainLength:
+        fGrainLength = value;
         break;
         // lfo
     case kAmpLFOType:
@@ -834,19 +814,8 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
             synth.sendMessage(*client, 1, "/region0/lfo0/wave", "i", &args);
         }
         break;
-    case kAmpLFOSync:
-        fAmpLFOSync = value;
-        makeSFZ();
-        break;
     case kAmpLFOFreq:
         fAmpLFOFreq = value;
-        break;
-    case kAmpLFOSyncFreq:
-        fAmpLFOSyncFreq = value;
-        makeSFZ();
-        break;
-    case kAmpLFODepth:
-        fAmpLFODepth = value;
         break;
     case kAmpLFOFade:
         fAmpLFOFade = value;
@@ -891,16 +860,8 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
             synth.sendMessage(*client, 1, "/region0/lfo1/wave", "i", &args);
         }
         break;
-    case kFilterLFOSync:
-        fFilterLFOSync = value;
-        makeSFZ();
-        break;
     case kFilterLFOFreq:
         fFilterLFOFreq = value;
-        break;
-    case kFilterLFOSyncFreq:
-        fFilterLFOSyncFreq = value;
-        makeSFZ();
         break;
     case kFilterLFODepth:
         fFilterLFODepth = value;
@@ -933,16 +894,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
             synth.sendMessage(*client, 1, "/region0/lfo2/wave", "i", &args);
         }
         break;
-    case kPitchLFOSync:
-        fPitchLFOSync = value;
-        makeSFZ();
-        break;
+
     case kPitchLFOFreq:
         fPitchLFOFreq = value;
-        break;
-    case kPitchLFOSyncFreq:
-        fPitchLFOSyncFreq = value;
-        makeSFZ();
         break;
     case kPitchLFODepth:
         fPitchLFODepth = value;
@@ -969,7 +923,6 @@ void DropsPlugin::setState(const char *key, const char *value)
     {
         path = std::string(value);
         //loadSample(value);
-        makeSFZ();
     }
 }
 
@@ -1144,170 +1097,6 @@ void DropsPlugin::initSFZ()
     opcodes["direction"] = "forward";
 }
 
-void DropsPlugin::makeSFZ()
-{
-    const float fSampleLength = static_cast<float>(sampleLength);
-    uint loopstartInFrames = fSampleLength * fSampleLoopStart;
-    uint loopEndInFrames =
-        std::min(static_cast<uint>(sampleLength - 1),
-                 static_cast<uint>(fSampleLength * fSampleLoopEnd));
-    uint sampleInInFrames = fSampleLength * fSampleIn;
-    uint sampleOutInFrames = fSampleLength * fSampleOut;
-    opcodes["sample"] = path;
-
-    opcodes["offset"] = std::to_string(sampleInInFrames);
-    opcodes["end"] = std::to_string(sampleOutInFrames);
-    opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
-
-    opcodes["lfo01_wave"] = std::to_string(lfo_types_[static_cast<int>(fAmpLFOType)]);
-    opcodes["lfo01_freq"] = std::to_string(fAmpLFOFreq * lfo_max_freq);
-    opcodes["lfo01_volume"] = std::to_string(fAmpLFODepth * amp_lfo_depth);
-    opcodes["lfo01_fade"] = std::to_string(fAmpLFOFade * lfo_fade);
-    opcodes["lfo01_beats"] = lfo_sync_[static_cast<int>(fAmpLFOSyncFreq)];
-
-    opcodes["lfo02_wave"] = std::to_string(lfo_types_[static_cast<int>(fFilterLFOType)]);
-    opcodes["lfo02_freq"] = std::to_string(fFilterLFOFreq * lfo_max_freq);
-    opcodes["lfo02_cutoff"] = std::to_string(fFilterLFODepth * (fFilterMaxFreq * .5));
-    opcodes["lfo02_fade"] = std::to_string(fFilterLFOFade * lfo_fade);
-    opcodes["lfo02_beats"] = lfo_sync_[static_cast<int>(fFilterLFOSyncFreq)];
-
-    opcodes["lfo03_wave"] = std::to_string(lfo_types_[static_cast<int>(fPitchLFOType)]);
-    opcodes["lfo03_freq"] = std::to_string(fPitchLFOFreq * lfo_max_freq);
-    // opcodes["lfo03_pitch"] = std::to_string(fPitchLFODepth * pitch_lfo_depth);
-    opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * lfo_fade);
-    opcodes["lfo03_beats"] = lfo_sync_[static_cast<int>(fPitchLFOSyncFreq)];
-
-    opcodes["cutoff"] = std::to_string(fFilterCutOff * fFilterMaxFreq);
-    opcodes["fileg_depth"] = std::to_string(fFilterEGDepth * filter_eg_depth);
-    opcodes["pitcheg_depth"] = std::to_string(fPitchEGDepth * pitch_eg_depth);
-    opcodes["pitch_keycenter"] = std::to_string(static_cast<int>(fSamplePitchKeyCenter));
-
-    std::stringstream buffer;
-
-    buffer << "<region>\n";
-    buffer << "sample=" << opcodes["sample"] << "\n";
-
-    // top bar
-    buffer << "pitch_keycenter=" << opcodes["pitch_keycenter"] << "\n";
-    buffer << "pitch=-100\n"; // tune
-    buffer << "pitch_oncc500=200\n";
-    buffer << "direction=" << opcodes["direction"] << "\n";
-    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)] << "\n";
-
-    // display
-    buffer << "offset=0\n";
-    buffer << "offset_oncc501=" << std::to_string(sampleLength) << "\n";
-    buffer << "end=" << std::to_string(sampleLength) << "\n";
-    buffer << "end_oncc502=-" << std::to_string(sampleLength) << "\n";
-    buffer << "loop_start=0\n";
-    buffer << "loop_start_oncc503=" << std::to_string(sampleLength) << "\n";
-    buffer << "loop_end=0\n";
-    buffer << "loop_end_oncc504=" << std::to_string(sampleLength) << "\n";
-
-    // amp TAB
-    // amp ADSR cc 201 - 299
-    buffer << "ampeg_attack=0\n";
-    buffer << "ampeg_attack_oncc201=10\n";
-    buffer << "ampeg_decay=0\n";
-    buffer << "ampeg_decay_oncc202=10\n";
-    buffer << "ampeg_sustain=0\n";
-    buffer << "ampeg_sustain_oncc203=100\n";
-    buffer << "ampeg_release=0.001\n";
-    buffer << "ampeg_release_oncc204=10\n";
-    // amp LFO
-    buffer << "lfo01_wave=" << opcodes["lfo01_wave"] << "\n";
-    if (static_cast<bool>(fAmpLFOSync))
-    {
-        buffer << "lfo01_beats=" << opcodes["lfo01_beats"] << "\n";
-        buffer << "lfo01_count=1\n";
-    }
-    else
-    {
-        buffer << "lfo01_freq=0\n";
-        buffer << "lfo01_freq_oncc205=20\n";
-    }
-    buffer << "lfo01_volume=0\n";
-    buffer << "lfo01_volume_oncc206=12\n";
-    buffer << "lfo01_fade=0\n";
-    buffer << "lfo01_fade_oncc207=10\n";
-
-    // tab filter
-    buffer << "fil_type=" << filters_[static_cast<uint>(fFilterType)] << "\n";
-    buffer << "cutoff=20\n"; // << opcodes["cutoff"] << "\n";
-    buffer << "cutoff_oncc310=12000\n";
-    buffer << "resonance=0\n";
-    buffer << "resonance_oncc311=20\n";
-    // filter adsr
-    buffer << "fileg_depth=0\n";
-    buffer << "fileg_depth_oncc312=12000\n";
-    buffer << "fileg_attack=0\n";
-    buffer << "fileg_attack_oncc301=10\n";
-    buffer << "fileg_decay=0\n";
-    buffer << "fileg_decay_oncc302=10 \n";
-    buffer << "fileg_sustain=0 \n";
-    buffer << "fileg_sustain_oncc303=100 \n";
-    buffer << "fileg_release=10 \n";
-    buffer << "fileg_release_oncc304=-10\n";
-    // filter lfo
-    buffer << "lfo02_wave=" << opcodes["lfo02_wave"] << "\n";
-    if (static_cast<bool>(fFilterLFOSync))
-    {
-        buffer << "lfo02_beats=" << opcodes["lfo02_beats"] << "\n";
-        buffer << "lfo02_count=1\n";
-    }
-    else
-    {
-        buffer << "lfo02_freq=0\n";
-        buffer << "lfo02_freq_oncc305=20\n";
-    }
-    buffer << "lfo02_cutoff=0\n";
-    buffer << "lfo02_cutoff_oncc306=24000\n";
-    buffer << "lfo02_fade=0\n";
-    buffer << "lfo02_fade_oncc307=10\n";
-
-    // tab pitch
-    // pitch adsr
-    buffer << "pitcheg_depth=0\n";
-    buffer << "pitcheg_depth_oncc400=1200";
-    buffer << "pitcheg_attack=0 \n";
-    buffer << "pitcheg_attack_oncc401=10\n";
-    buffer << "pitcheg_decay=0\n";
-    buffer << "pitcheg_decay_oncc402=10\n";
-    buffer << "pitcheg_sustain=0\n";
-    buffer << "pitcheg_sustain_oncc403=100\n";
-    buffer << "pitcheg_release=0.001\n";
-    buffer << "pitcheg_release_oncc404=10\n";
-    // pitch lfo
-    buffer << "lfo03_wave=" << opcodes["lfo03_wave"] << "\n";
-    if (static_cast<bool>(fPitchLFOSync))
-    {
-        buffer << "lfo03_beats=" << opcodes["lfo03_beats"] << "\n";
-        buffer << "lfo03_count=1\n";
-    }
-    else
-    {
-        buffer << "lfo03_freq=0\n";
-        buffer << "lfo03_freq_oncc405=20\n";
-    }
-    buffer << "lfo03_pitch=0\n";
-    buffer << "lfo03_pitch_oncc406=1200\n";
-    buffer << "lfo03_fade=0\n";
-    buffer << "lfo03_fade_oncc407=10";
-    // buffer << "trigger=attack\n";
-
-    // replace decimal comma wih decimal point
-    std::string tmpSFZ = buffer.str();
-    std::replace(tmpSFZ.begin(), tmpSFZ.end(), ',', '.'); // TODO don't replace in file path
-
-#ifdef DEBUG
-    std::cout << "----------------- SFZ FILE ------------------\n";
-    std::cout << tmpSFZ << std::endl;
-    std::cout << "----------------- SFZ FILE ------------------\n";
-#endif
-
-    std::lock_guard<std::mutex> lock(synthMutex);
-    synth.loadSfzString("", tmpSFZ);
-}
 
 // --  MAIN PLUGIN FUNCTIONS  --------------------------------------------------
 
@@ -1344,54 +1133,6 @@ void DropsPlugin::run(
 
     uint32_t framesDone = 0;
     uint32_t curEventIndex = 0; // index for midi event to process
-
-    // automation data
-    // tab amp
-    // amp adsr
-    synth.hdcc(0, 201, fAmpEGAttack);
-    synth.hdcc(0, 202, fAmpEgDecay);
-    synth.hdcc(0, 203, fAmpEgSustain);
-    synth.hdcc(0, 204, fAmpEgRelease);
-    // amp lfo
-    // todo lfo sync
-    synth.hdcc(0, 205, fAmpLFOFreq);
-    synth.hdcc(0, 206, fAmpLFODepth);
-    synth.hdcc(0, 207, fAmpLFOFade);
-
-    // tab filter
-    synth.hdcc(0, 310, fFilterCutOff);
-    synth.hdcc(0, 311, fFilterResonance);
-    // filter adsr
-    synth.hdcc(0, 312, fFilterEGDepth);
-    synth.hdcc(0, 301, fFilterEGAttack);
-    synth.hdcc(0, 302, fFilterEgDecay);
-    synth.hdcc(0, 303, fFilterEgSustain);
-    synth.hdcc(0, 304, fFilterEgRelease);
-    // filter lfo
-    // todo lfo sync
-    synth.hdcc(0, 305, fFilterLFOFreq);
-    synth.hdcc(0, 306, fFilterLFODepth);
-    synth.hdcc(0, 307, fFilterLFOFade);
-
-    // tab pitch
-    // pitch adsr
-    synth.hdcc(0, 400, fPitchEGDepth);
-    synth.hdcc(0, 401, fPitchEGAttack);
-    synth.hdcc(0, 402, fPitchEgDecay);
-    synth.hdcc(0, 403, fPitchEgSustain);
-    synth.hdcc(0, 404, fPitchEgRelease);
-    // pitch lfo
-    // todo lfo sync
-    synth.hdcc(0, 405, fPitchLFOFreq);
-    synth.hdcc(0, 406, fPitchLFODepth);
-    synth.hdcc(0, 407, fPitchLFOFade);
-
-    const float n = fSamplePitch / 200.f;
-    synth.hdcc(0, 500, n);
-    synth.hdcc(0, 501, fSampleIn);
-    synth.hdcc(0, 502, -fSampleOut + 1.f);
-    synth.hdcc(0, 503, fSampleLoopStart);
-    synth.hdcc(0, 504, fSampleLoopEnd);
 
     while (framesDone < frames)
     {
@@ -1431,15 +1172,21 @@ void DropsPlugin::run(
                 if (bufferPos > st_audioBuffer.size()) bufferPos = 0;
             }
         }
-        int density = (int)(fAmpLFODepth*1000);
+        int densityHz = (int)(sampleRate / (fGrainDensity*1000));
+        //std::cout << "fgraindensity = " << fGrainDensity << std::endl;
+
 
         for (int pos = 0; pos < frames; pos++){
+            playheadPos--;
+            if (playheadPos > st_audioBuffer.size()) playheadPos = 0;
+            if (playheadPos < 0) playheadPos = st_audioBuffer.size();
+
             if (grainStart == 0){
                 //std::cout << "grainstarting, array length is: " << grainPlayer.grain_array_length << std::endl;
                 float startPos = float(std::rand() % 1000000) / 1000000;
-                grainPlayer.add(startPos, 44100, GRAIN_DIR::forward, &st_audioBuffer, 128);
+                grainPlayer.add(startPos, fGrainLength*sampleRate*10, GRAIN_DIR::forward, &st_audioBuffer, 128);
             }
-            if (grainStart > density){
+            if (grainStart > densityHz){
                 grainStart = 0;
             }else{
                 grainStart++;

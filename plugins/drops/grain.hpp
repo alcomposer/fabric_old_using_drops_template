@@ -17,6 +17,30 @@ inline int mod(int a, int b)
     return r < 0 ? r + b : r;
 }
 
+inline float float_mod(float a, float b)
+{
+    float mod;
+    // Handling negative values
+    if (a < 0)
+        mod = -a;
+    else
+        mod =  a;
+    if (b < 0)
+        b = -b;
+ 
+    // Finding mod by repeated subtraction
+     
+    while (mod >= b)
+        mod = mod - b;
+ 
+    // Sign of result typically depends
+    // on sign of a.
+    if (a < 0)
+        return -mod;
+ 
+    return mod;
+}
+
 struct Grain
 {
     // Start Position is the offset into the sample where playback should start.
@@ -60,14 +84,17 @@ struct Grain
         }
         sample_position = mod(sample_position,bufferSize);
 
-        float window = sin(PI * (float)age / (float)lifespan);
-        //double i = (double)age/lifespan;
-        //double r = 0.5;
-        //float window = (cos(fmax(fabs((double)i - 0.5) * (2.0 / r)  - (1.0 / r - 1.0), 0.0) * PI) + 1.0) / 2.0;
+        //Sin Window
+        //float window = sin(PI * (float)age / (float)lifespan); 
+
+        //Tukey Window
+        double i = (double)age/lifespan;
+        double r = 0.5;
+        float window = (cos(fmax(fabs((double)i - 0.5) * (2.0 / r)  - (1.0 / r - 1.0), 0.0) * PI) + 1.0) / 2.0;
 
         std::pair<float,float> output_sample;
-        output_sample.first  = sample_ptr->at(sample_position).first  * window;
-        output_sample.second = sample_ptr->at(sample_position).second * window;
+        output_sample.first  = (*sample_ptr)[sample_position].first  * window;
+        output_sample.second = (*sample_ptr)[sample_position].second * window;
         return output_sample;
     };
 

@@ -84,47 +84,50 @@ void DropsUI::initTabAmp()
     fAmpEgDecay->format_str = "%.2f s";
     //fAmpEgAttack->setParamOnMove = true;
 
-    fAmpEgSustain = new Knob(hbox_amp_row_1);
-    fAmpEgSustain->setId(kAmpEgSustain);
-    fAmpEgSustain->setSize(knobSize);
-    fAmpEgSustain->setCallback(this);
-    fAmpEgSustain->labelSize = font_size;
-    fAmpEgSustain->gauge_width = gauge;
-    fAmpEgSustain->margin = margin;
-    fAmpEgSustain->label = "SUSTAIN";
-    fAmpEgSustain->foreground_color = saffron;
-    fAmpEgSustain->background_color = black_olive;
-    fAmpEgSustain->highlight_color = saffron_1;
-    fAmpEgSustain->text_color = floral_white;
-    fAmpEgSustain->real_min = 0.0f;
-    fAmpEgSustain->real_max = 100.f;
-    fAmpEgSustain->format_str = "%.f%%";
-    fAmpEgSustain->setParamOnMove = true;
+    fGrainDensity = new Knob(hbox_amp_row_1);
+    fGrainDensity->setId(kGrainDensity);
+    fGrainDensity->setSize(knobSize);
+    fGrainDensity->setCallback(this);
+    fGrainDensity->labelSize = font_size;
+    fGrainDensity->gauge_width = gauge;
+    fGrainDensity->margin = margin;
+    fGrainDensity->label = "DENSITY";
+    fGrainDensity->foreground_color = saffron;
+    fGrainDensity->background_color = black_olive;
+    fGrainDensity->highlight_color = saffron_1;
+    fGrainDensity->text_color = floral_white;  
+    fGrainDensity->real_min = 0.0f;
+    fGrainDensity->real_max = 1000.f;
+    fGrainDensity->min = 1.0f;
+    fGrainDensity->max = 1000.f;
+    fGrainDensity->format_str = "%.2f Hz";
+    fGrainDensity->using_log = true;
+    fGrainDensity->setParamOnMove = true;
 
-    fAmpEgRelease = new Knob(hbox_amp_row_1);
-    fAmpEgRelease->setId(kAmpEgRelease);
-    fAmpEgRelease->setSize(knobSize);
-    fAmpEgRelease->setCallback(this);
-    fAmpEgRelease->labelSize = font_size;
-    fAmpEgRelease->gauge_width = gauge;
-    fAmpEgRelease->margin = margin;
-    fAmpEgRelease->label = "RELEASE";
-    fAmpEgRelease->foreground_color = saffron;
-    fAmpEgRelease->background_color = black_olive;
-    fAmpEgRelease->highlight_color = saffron_1;
-    fAmpEgRelease->text_color = floral_white;
-    fAmpEgRelease->real_min = 0.0f;
-    fAmpEgRelease->real_max = 10.f;
-    fAmpEgRelease->min = 1.0f;
-    fAmpEgRelease->max = 101.f;
-    fAmpEgRelease->format_str = "%.2f s";
-    fAmpEgRelease->using_log = true;
-    fAmpEgRelease->setParamOnMove = true;
+    fGrainLength = new Knob(hbox_amp_row_1);
+    fGrainLength->setId(kGrainLength);
+    fGrainLength->setSize(knobSize);
+    fGrainLength->setCallback(this);
+    fGrainLength->labelSize = font_size;
+    fGrainLength->gauge_width = gauge;
+    fGrainLength->margin = margin;
+    fGrainLength->label = "LENGTH";
+    fGrainLength->foreground_color = saffron;
+    fGrainLength->background_color = black_olive;
+    fGrainLength->highlight_color = saffron_1;
+    fGrainLength->text_color = floral_white;
+    fGrainLength->real_min = 0.0f;
+    fGrainLength->real_max = 10.f;
+    fGrainLength->min = 1.0f;
+    fGrainLength->max = 101.f;
+    fGrainLength->format_str = "%.2f s";
+    fGrainLength->using_log = true;
+    fGrainLength->setParamOnMove = true;
 
     //hbox_amp_row_1->addWidget(fAmpEgAttack);
     hbox_amp_row_1->addWidget(fAmpEgDecay);
-    hbox_amp_row_1->addWidget(fAmpEgSustain);
-    hbox_amp_row_1->addWidget(fAmpEgRelease);
+    hbox_amp_row_1->addWidget(fGrainDensity);
+    hbox_amp_row_1->addWidget(fGrainLength);
 
     // row 2
 
@@ -184,27 +187,6 @@ void DropsUI::initTabAmp()
     fAmpLFOFreq->using_log = false;
     fAmpLFOFreq->setParamOnMove = true;
 
-    fAmpLFODepth = new Knob(hbox_amp_row_2);
-    fAmpLFODepth->setId(kAmpLFODepth);
-    fAmpLFODepth->setCallback(this);
-    fAmpLFODepth->setSize(knobSize);
-    fAmpLFODepth->labelSize = font_size;
-    fAmpLFODepth->gauge_width = gauge;
-    fAmpLFODepth->margin = margin;
-    fAmpLFODepth->label = "DENSITY";
-    fAmpLFODepth->background_color = black_olive;
-    fAmpLFODepth->foreground_color = saffron;
-    fAmpLFODepth->highlight_color = saffron_1;
-    fAmpLFODepth->text_color = floral_white;
-    fAmpLFODepth->default_value = 500.f;
-    fAmpLFODepth->real_min = 1.f;
-    fAmpLFODepth->real_max = 1000.f;
-    fAmpLFODepth->min = 1.f;
-    fAmpLFODepth->max = 1000.f;
-    fAmpLFODepth->format_str = "%.2f Hz";
-    fAmpLFODepth->using_log = false;
-    fAmpLFODepth->setParamOnMove = true;
-
     fAmpLFOFade = new Knob(hbox_amp_row_2);
     fAmpLFOFade->setId(kAmpLFOFade);
     fAmpLFOFade->setCallback(this);
@@ -252,7 +234,6 @@ void DropsUI::initTabAmp()
     hbox_amp_row_2->addWidget(fAmpLFOType);
     hbox_amp_row_2->addWidget(fAmpLFOSync);
     hbox_amp_row_2->addWidget(fAmpLFOFreq);
-    hbox_amp_row_2->addWidget(fAmpLFODepth);
     hbox_amp_row_2->addWidget(fAmpLFOFade);
 
     vbox_amp->addWidget(hbox_amp_row_1);
