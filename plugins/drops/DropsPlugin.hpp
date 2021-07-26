@@ -22,7 +22,7 @@
 #include "DistrhoPlugin.hpp"
 #include "DropsParams.h"
 #include "DropsGeometry.hpp"
-#include "sfizz.hpp"
+
 #include "GrainPlayer.hpp"
 
 #include <iostream>
@@ -110,10 +110,6 @@ protected:
     // -------------------------------------------------------------------
 
 private:
-    void foo(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
-
-    void initSFZ();
-    void makeSFZ();
     int loadSample(const char *fp);
     //    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
 
@@ -122,7 +118,6 @@ private:
     bool loadedSample;
     std::string path;
     double sampleRate;
-    sfz::Sfizz synth;
     std::mutex synthMutex;
     std::vector<signed char> waveForm;
     std::vector<char> miniMap;
@@ -197,7 +192,6 @@ private:
 
     std::unordered_map<std::string, std::string> opcodes;
     std::vector<std::string> messageList;
-    sfz::ClientPtr client;
 
     // some constants
     //const float lfo_max_freq = 1000.0f;

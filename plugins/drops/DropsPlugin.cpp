@@ -36,8 +36,6 @@ DropsPlugin::DropsPlugin():
     sig_sampleLoaded = false;
     loadedSample = false;
     bpm = 120.;
-    synth.setSampleRate(sampleRate);
-    synth.setNumVoices(16);
     fSampleIn = 0.0f;
     fSampleOut = 1.0f;
     fSampleLoopStart = 0.0f;
@@ -90,9 +88,8 @@ DropsPlugin::DropsPlugin():
     fPitchLFOFade = 0.0f;
 
     fFilterMaxFreq = sampleRate * .5;
-    initSFZ();
 
-    client = synth.createClient(&messageList);
+
 
     st_audioBuffer.resize(10*sampleRate);
 
@@ -745,50 +742,8 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kSampleLoopEnd:
         fSampleLoopEnd = value;
         break;
-    case kSamplePitchKeyCenter:
-        fSamplePitchKeyCenter = value;
-        {
-            sfizz_arg_t args;
-            args.i = static_cast<int>(fSamplePitchKeyCenter);
-            synth.sendMessage(*client, 0, "/region0/pitch_keycenter", "i", &args);
-            break;
-        }
-    case kSamplePitch:
-        fSamplePitch = std::round(value);
-        break;
-    case kSamplePlayMode:
-        fSamplePlayMode = value;
-        {
-            sfizz_arg_t args;
-            const int i = static_cast<int>(fSamplePlayMode);
-            args.s = play_modes_[i];
-            synth.sendMessage(*client, 0, "/region0/loop_mode", "s", &args);
-        }
-        //makeSFZ();
-        break;
-    case kSampleOversampling:
-        // {
-        //     std::lock_guard<std::mutex> lock(synthMutex);
-        //     const uint index = value;
-        //     switch (index)
-        //     {
-        //     case 0:
-        //         synth.setOversamplingFactor(1);
-        //         break;
-        //     case 1:
-        //         synth.setOversamplingFactor(2);
-        //         break;
-        //     case 2:
-        //         synth.setOversamplingFactor(4);
-        //         break;
-        //     case 3:
-        //         synth.setOversamplingFactor(8);
-        //         break;
-        //     default:
-        //         synth.setOversamplingFactor(1);
-        //         break;
-        //     }
-        break;
+
+
     //}
     // amp
     //case kAmpEgAttack:
@@ -804,15 +759,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fGrainLength = value;
         break;
         // lfo
-    case kAmpLFOType:
-        fAmpLFOType = value;
-        {
-            sfizz_arg_t args;
-            const int i = static_cast<int>(fAmpLFOType);
-            args.i = lfo_types_[i];
-            synth.sendMessage(*client, 1, "/region0/lfo0/wave", "i", &args);
-        }
-        break;
     case kAmpLFOFreq:
         fAmpLFOFreq = value;
         break;
@@ -820,15 +766,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fSpray = value;
         break;
         // filter
-    case kFilterType:
-        fFilterType = value;
-        {
-
-            sfizz_arg_t args;
-            args.s = filters_[static_cast<uint>(fFilterType)];
-            synth.sendMessage(*client, 1, "/region0/filter0/type", "s", &args);
-        }
-        break;
     case kFilterCutOff:
         fFilterCutOff = value;
         break;
@@ -849,15 +786,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kFilterEgRelease:
         fFilterEgRelease = value;
-        break;
-    case kFilterLFOType:
-        fFilterLFOType = value;
-        {
-            sfizz_arg_t args;
-            const int i = static_cast<int>(fFilterLFOType);
-            args.i = lfo_types_[i];
-            synth.sendMessage(*client, 1, "/region0/lfo1/wave", "i", &args);
-        }
         break;
     case kFilterLFOFreq:
         fFilterLFOFreq = value;
@@ -884,16 +812,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kPitchEgRelease:
         fPitchEgRelease = value;
         break;
-    case kPitchLFOType:
-        fPitchLFOType = value;
-        {
-            sfizz_arg_t args;
-            const int i = static_cast<int>(fPitchLFOType);
-            args.i = lfo_types_[i];
-            synth.sendMessage(*client, 1, "/region0/lfo2/wave", "i", &args);
-        }
-        break;
-
     case kPitchLFOFreq:
         fPitchLFOFreq = value;
         break;
@@ -1037,65 +955,6 @@ int DropsPlugin::loadSample(const char *fp)
     return 0;
 }
 
-void DropsPlugin::initSFZ()
-{
-    opcodes["default_path"] = "";
-    opcodes["pitch"] = "0";
-    opcodes["pitch_oncc500"] = "0";
-    opcodes["ampeg_attack"] = "0";
-    opcodes["ampeg_attack_oncc2010"] = "10";
-    opcodes["ampeg_decay"] = "0";
-    opcodes["ampeg_decay_oncc202"] = "10";
-    opcodes["ampeg_sustain"] = "100";
-    opcodes["ampeg_sustain_oncc203"] = "-100";
-    opcodes["ampeg_release"] = "1";
-    opcodes["ampeg_release_oncc204"] = "10";
-    opcodes["lfo01_wave"] = "triangle";
-    opcodes["lfo01_freq"] = "0";
-    opcodes["lfo01_volume"] = "0";
-    opcodes["lfo01_fade"] = "0";
-    opcodes["fil_type"] = "lpf_2p";
-    opcodes["cutoff"] = "20";
-    opcodes["cutoff_oncc310"] = "9600";
-    opcodes["resonance"] = "0";
-    opcodes["resonance_oncc311"] = "40";
-    opcodes["fileg_depth"] = "12000";
-    opcodes["fileg_attack"] = "0";
-    opcodes["fileg_attack_oncc301"] = "10";
-    opcodes["fileg_decay"] = "0";
-    opcodes["fileg_decay_oncc302"] = "10";
-    opcodes["fileg_sustain"] = "100";
-    opcodes["fileg_sustain_oncc303"] = "-100";
-    opcodes["fileg_release"] = "0.1";
-    opcodes["fileg_release_oncc304"] = "10";
-    opcodes["lfo02_freq"] = "0";
-    opcodes["lfo02_cutoff"] = "24000";
-    opcodes["lof02_fade"] = "0";
-    opcodes["pitcheg_depth"] = "2400";
-    opcodes["pitcheg_attack"] = "0";
-    opcodes["pitcheg_attack_oncc401"] = "10";
-    opcodes["pitcheg_decay"] = "0";
-    opcodes["pitcheg_decay_oncc402"] = "10";
-    opcodes["pitcheg_sustain"] = "0";
-    opcodes["pitcheg_sustain_oncc403"] = "100";
-    opcodes["pitcheg_release"] = "0.001";
-    opcodes["pitcheg_release_oncc404"] = "10";
-    opcodes["lfo03_freq"] = "0";
-    opcodes["lfo03_pitch"] = "0";
-    opcodes["lfo03_fade"] = "0";
-    opcodes["trigger"] = "attack";
-    opcodes["loop_mode"] = "no_loop";
-    opcodes["loop_start"] = "0";
-    opcodes["loop_end"] = "4294967296";
-    opcodes["sample"] = "";
-    opcodes["lokey"] = "0";
-    opcodes["hikey"] = "127";
-    opcodes["pitch_keycenter"] = "c4";
-    opcodes["offset"] = "0";
-    opcodes["end"] = "4294967296";
-    opcodes["direction"] = "forward";
-}
-
 
 // --  MAIN PLUGIN FUNCTIONS  --------------------------------------------------
 
@@ -1120,14 +979,14 @@ void DropsPlugin::run(
     const TimePosition &timePos(getTimePosition());
     if (timePos.bbt.valid)
     {
-        synth.tempo(0, 60.0f / timePos.bbt.beatsPerMinute);
-        synth.timeSignature(0, timePos.bbt.beatsPerBar, timePos.bbt.beatType);
+        //synth.tempo(0, 60.0f / timePos.bbt.beatsPerMinute);
+        //synth.timeSignature(0, timePos.bbt.beatsPerBar, timePos.bbt.beatType);
         const double beat = timePos.bbt.beat - 1;
         const double fracBeat = timePos.bbt.tick / timePos.bbt.ticksPerBeat;
         const double barBeat = beat + fracBeat;
-        synth.timePosition(0, timePos.bbt.bar, barBeat);
+        //synth.timePosition(0, timePos.bbt.bar, barBeat);
         //printf("barBeat %f\n", barBeat);
-        synth.playbackState(0, static_cast<int>(timePos.playing));
+        //synth.playbackState(0, static_cast<int>(timePos.playing));
     }
 
     uint32_t framesDone = 0;
@@ -1146,10 +1005,10 @@ void DropsPlugin::run(
             switch (midi_message)
             {
             case 0x80: // note_off
-                synth.noteOff(framesDone, midi_data1, midi_data2);
+                //synth.noteOff(framesDone, midi_data1, midi_data2);
                 break;
             case 0x90: // note_on
-                synth.noteOn(framesDone, midi_data1, midi_data2);
+                //synth.noteOn(framesDone, midi_data1, midi_data2);
                 break;
             default:
                 break;
