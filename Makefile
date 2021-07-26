@@ -42,6 +42,7 @@ dist-clean:clean
 
 install:
 	cp -r -v bin/drops.lv2/ $(HOME)/.lv2/
+	cp -v bin/drops-vst.so $(HOME)/.vst/
 # --------------------------------------------------------------
 
 .PHONY: plugins
