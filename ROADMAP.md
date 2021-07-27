@@ -23,6 +23,8 @@
   - [ ] clear bufer (button)  
 - [x] Grain playback control:
   - [x] Density
+    - Option to adjust Density in Hz or Beats
+    - Possibly have two seperate controls, and allow syncing between to allow ramping effects
   - [x] Readhead speed
   - [ ] Readhead sync to writehead (to use Fabric as a set'n'forget effect)
   - [ ] Readhead sync to writehead offset (as above)
