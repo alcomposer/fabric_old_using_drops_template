@@ -189,6 +189,8 @@ private:
     float filterLFOFreq, filterLFOSyncFreq;
     float pitchLFOFreq, pitchLFOSyncFreq;
 
+    Grain grainArrayDisplayTemp[256] = {Grain()};
+
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FabricUI)
 };
 

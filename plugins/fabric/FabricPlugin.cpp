@@ -19,6 +19,7 @@
 #include "DistrhoPlugin.hpp"
 #include "FabricPlugin.hpp"
 
+#include <mutex>
 #include <random>
 
 START_NAMESPACE_DISTRHO
@@ -1069,6 +1070,10 @@ void FabricPlugin::run(
             waveForm.push_back(((st_audioBuffer[pos].first + st_audioBuffer[pos].second) * 0.5) * float(display_height * 0.5));
         }
         
+        if(grainArrayDisplayMutex.try_lock()){
+            memcpy(&grainArrayDisplay, grainPlayer.grain_array, sizeof(grainArrayDisplay));
+            grainArrayDisplayMutex.unlock();
+        };
 } // run
 
 /* Plugin entry point, called by DPF to create a new plugin instance. */

@@ -1162,20 +1162,25 @@ void FabricUI::drawWaveform()
 
 
         // draw grains
+        if(plugin->grainArrayDisplayMutex.try_lock()){
+            memcpy(grainArrayDisplayTemp, plugin->grainArrayDisplay, sizeof(plugin->grainArrayDisplay));
+            plugin->grainArrayDisplayMutex.unlock();
+        };
         beginPath();
         strokeColor(0,0,255,150); //change to an enum
         strokeWidth(2.0f);
         for (int i = 0; i < 128; i++){
             //std::cout << "drawing grain number: " << i << std::endl;
-            if (plugin->grainPlayer.grain_array[i].erase_me == false){
-                float grainPos = display_left + plugin->grainPlayer.grain_array[i].start_position * display_width;
-                //std::cout << "drawing grain at: " << (float)plugin->grainPlayer.grain_array[i].start_position << std::endl;
+            if (grainArrayDisplayTemp[i].erase_me == false){
+                float grainPos = display_left + grainArrayDisplayTemp[i].start_position * display_width;
+                //std::cout << "drawing grain number: "<< i << " at: " << (float)grainArrayDisplayTemp[i].start_position << std::endl;
                 moveTo(grainPos, display_center - 25);
                 lineTo(grainPos, display_center + 25);
             }
         }
         stroke();
         closePath();
+        
 
 
         // rec head line

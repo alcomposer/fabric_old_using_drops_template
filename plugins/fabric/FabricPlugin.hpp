@@ -215,6 +215,9 @@ private:
 
     int grainStart = {0};
 
+    Grain grainArrayDisplay[256] = {Grain()};
+    std::mutex grainArrayDisplayMutex;
+
 
 
     friend class FabricUI;
