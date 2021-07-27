@@ -1069,7 +1069,8 @@ void FabricUI::drawWaveform()
 {
     double view = viewEnd - viewStart; // set these when zooming in
     //double view = getSampleRate() * 10;
-    double samples_per_pixel = view / (double)display_width;
+    //double samples_per_pixel = view / (double)display_width;
+    double samples_per_pixel = 1.0; // FIXME still connected to scroll zoom somehow
     float fIndex;
     uint iIndex;
 
