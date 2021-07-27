@@ -190,7 +190,7 @@ void FabricUI::initTabAmp()
     fAmpLFOFreq->labelSize = font_size;
     fAmpLFOFreq->gauge_width = gauge;
     fAmpLFOFreq->margin = margin;
-    fAmpLFOFreq->label = "";
+    fAmpLFOFreq->label = "-";
     fAmpLFOFreq->background_color = black_olive;
     fAmpLFOFreq->foreground_color = saffron;
     fAmpLFOFreq->highlight_color = saffron_1;
