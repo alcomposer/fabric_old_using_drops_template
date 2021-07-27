@@ -1,23 +1,17 @@
 #pragma once
 
 #include "grain.hpp"
-#include <boost/intrusive/list.hpp>
 #include <iostream>
 
 #define MAX_GRAINS 256
 
 struct GrainPlayer
 {
-    using GrainList = boost::intrusive::list<Grain>;
-
-    GrainList grains_used;
-    GrainList grains_free;
     Grain grain_array[MAX_GRAINS];
+    Grain grain_array_tmp[MAX_GRAINS];
+    unsigned int grain_array_length = 0;
 
-    GrainPlayer() {
-        for (Grain &grain : grain_array)
-            grains_free.push_back(grain);
-    }
+    GrainPlayer(){}
 
     virtual ~GrainPlayer() {
     }
@@ -28,23 +22,23 @@ struct GrainPlayer
           return;
         }
 
-        if (grains_free.empty()) {
+        for(int pos = 0; pos < MAX_GRAINS; pos++){
+          if (grain_array[pos].erase_me == true){
+            Grain grain;
+
+            // Configure grain for playback
+            grain.start_position_int = start_position * sample_ptr->size();
+            grain.start_position = start_position;
+            grain.sample_ptr = sample_ptr;
+            grain.lifespan = lifespan;
+            grain.age = lifespan;
+            grain.direction = direction;
+            grain.erase_me = false;
+
+            grain_array[pos] = grain;
             return;
-        }
-
-        Grain &grain = grains_free.front();
-        grains_free.pop_front();
-        grains_used.push_back(grain);
-
-        // Configure grain for playback
-        grain = Grain();
-        grain.start_position_int = start_position * sample_ptr->size();
-        grain.start_position = start_position;
-        grain.sample_ptr = sample_ptr;
-        grain.lifespan = lifespan;
-        grain.age = lifespan;
-        grain.direction = direction;
-        grain.erase_me = false;
+          };
+        };
     }
 
     std::pair<float,float> process()
@@ -54,20 +48,14 @@ struct GrainPlayer
         // Process grains
         // ---------------------------------------------------------------------
 
-        GrainList::iterator grain_iterator = grains_used.begin();
-
-        while (grain_iterator != grains_used.end()) {
-            Grain &grain = *grain_iterator;
-
-            std::pair<float,float> output = grain.getOutput();
-            mix_output.first  += output.first;
-            mix_output.second += output.second;
-            grain.step();
-
-            GrainList::iterator saved_iterator = grain_iterator++;
-            if (grain.erase_me) {
-                grains_used.erase(saved_iterator);
-                grains_free.push_back(grain);
+        for (unsigned int i=0; i < MAX_GRAINS; i++)
+        {
+            if(grain_array[i].erase_me == false)
+            {
+                std::pair<float,float> output = grain_array[i].getOutput();
+                mix_output.first  += output.first;
+                mix_output.second += output.second;
+                grain_array[i].step();
             }
         }
         return mix_output;
