@@ -32,12 +32,12 @@ struct GrainPlayer
             return;
         }
 
-        Grain &grain = grains_free.front();
+        Grain &slot = grains_free.front();
         grains_free.pop_front();
-        grains_used.push_back(grain);
+        grains_used.push_back(slot);
 
         // Configure grain for playback
-        grain = Grain();
+        Grain grain;
         grain.start_position_int = start_position * sample_ptr->size();
         grain.start_position = start_position;
         grain.sample_ptr = sample_ptr;
@@ -45,6 +45,8 @@ struct GrainPlayer
         grain.age = lifespan;
         grain.direction = direction;
         grain.erase_me = false;
+    
+        slot = grain;
     }
 
     std::pair<float,float> process()
